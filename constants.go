@@ -6,7 +6,7 @@ var trv_int = []byte("0123456789ABCDEFGHJKLMNPQRSTUVWXYZ")
 //  it continues through the rest of the alphabet
 
 const (
-	sz    = string("Size")
+	sz    = string("Planet Size")
 	atmos = string("Atmosphere")
 	hydro = string("Hydrology")
 	pop   = string("Population")

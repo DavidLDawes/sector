@@ -45,15 +45,16 @@ var (
 // the label that's in the Box
 func (s *system) getSize() {
 	s.Size = int8(zero_to_ten())
-	s.getStarsDetails()
 
-	size.SetText(starCounts[s.numStars].description +
+	starDetails := s.getStarsDetails()
+	size.SetText(starCounts[s.numStars-1].description +
+		starDetails + "\n" +
 		sz + " " + string(trv_int[s.Size]) + ", " +
 		sizeDetails[s.Size].size + ", gravity " +
 		sizeDetails[s.Size].gravity)
 }
 
-func (s *system) getStarsDetails() {
+func (s *system) getStarsDetails() string {
 	switch zero_to_fifteen() {
 	case 0, 1, 2, 3, 4, 5, 6, 7:
 		s.numStars = 1
@@ -65,12 +66,10 @@ func (s *system) getStarsDetails() {
 		s.numStars = 1
 	}
 	s.starTypes = make([]string, s.numStars)
-	for i := int8(0); i < s.numStars; i++ {
-
-	}
+	return s.getStarTypes()
 }
 
-func (s *system) getStarTypes() {
+func (s *system) getStarTypes() (result string) {
 	switch two_to_twelve() {
 	case 2:
 		s.starTypes[0] = starTypes[0]
@@ -85,6 +84,7 @@ func (s *system) getStarTypes() {
 	default:
 		s.starTypes[0] = starTypes[3]
 	}
+	result = s.starTypes[0]
 	if s.numStars > 1 {
 		for i := 1; i < int(s.numStars); i++ {
 			switch zero_to_five() {
@@ -101,6 +101,10 @@ func (s *system) getStarTypes() {
 			default:
 				s.starTypes[i] = starTypes[3]
 			}
+			result += ", secondary " + s.starTypes[i]
 		}
+		result += "\n"
+
 	}
+	return
 }
