@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 
 	"fyne.io/fyne/widget"
@@ -12,14 +13,14 @@ type starBase struct {
 }
 
 type system struct {
-	Size             byte
-	Atmosphere       byte
-	Hydrology        byte
-	Population       byte
-	Government       byte
-	Law_Level        byte
-	Technology_Level byte
-	Starport         byte
+	Size             int8
+	Atmosphere       int8
+	Hydrology        int8
+	Population       int8
+	Government       int8
+	Law_Level        int8
+	Technology_Level int8
+	Starport         int8
 	bases            []starBase
 }
 
@@ -29,18 +30,66 @@ type sizeDetail struct {
 	g       float32
 }
 
+type atmosphereDetail struct {
+	description string
+	pressure    string
+	gear        string
+	pMin        float32
+	pMax        float32
+}
+
+type hydrologyDetail struct {
+	hydroRange  string
+	hydroMax    uint16
+	description string
+}
+
 var (
 	sizeDetails = []sizeDetail{
-		sizeDetail{"800 km", "Negligible", 0.0},
-		sizeDetail{"1,600 km", "0.05G", 0.05},
-		sizeDetail{"3,200 km", "0.15G", 0.15},
-		sizeDetail{"4,800 km", "0.25G", 0.25},
-		sizeDetail{"6,400 km", "0.35G", 0.35},
-		sizeDetail{"8,000 km", "0.45G", 0.45},
-		sizeDetail{"9,600 km", "0.7G", 0.7},
-		sizeDetail{"11,200 km", "0.9G", 0.9},
-		sizeDetail{"12,800 km", "1.0G", 1.0},
-		sizeDetail{"14,400 km", "1.25G", 1.25},
+		{"800 km", "Negligible", 0.0},
+		{"1,600 km", "0.05G", 0.05},
+		{"3,200 km", "0.15G", 0.15},
+		{"4,800 km", "0.25G", 0.25},
+		{"6,400 km", "0.35G", 0.35},
+		{"8,000 km", "0.45G", 0.45},
+		{"9,600 km", "0.7G", 0.7},
+		{"11,200 km", "0.9G", 0.9},
+		{"12,800 km", "1.0G", 1.0},
+		{"14,400 km", "1.25G", 1.25},
+		{"16,000 km", "1.4G", 1.4},
+	}
+
+	atmosphereDetails = []atmosphereDetail{
+		{"None", "0.00", "Vacc Suit", 0.0, 0.0},
+		{"Trace", "0.001 to 0.09", "Vacc Suit", 0.001, 0.09},
+		{"Very Thin, Tainted", "0.1 to 0.42", "Respirator, Filter", 0.1, 0.42},
+		{"Very Thin", "0.1 to 0.42", "Respirator", 0.1, 0.42},
+		{"Thin, Tainted", "0.43 to 0.7", "Respirator, Filter", 0.43, 0.7},
+		{"Thin", "0.43 to 0.7", "Respirator", 0.43, 0.7},
+		{"Standard", "0.71 to 1.49", "", 0.71, 1.49},
+		{"Standard, Tainted", "0.71 to 1.49", "Filter", 0.71, 1.49},
+		{"Dense", "1.5 to 2.5", "", 1.5, 2.5},
+		{"Dense, Tainted", "1.5 to 2.5", "Filter", 1.5, 2.5},
+		{"Exotic", "Varies", "Air Supply", 0.43, 2.5},
+		{"Corrosive", "Varies", "Vacc Suit", 0.43, 2.5},
+		{"Insidious", "Varies", "Vacc Suit", 0.43, 2.5},
+		{"Dense", "High", "Pressure Suit", 2.51, 25},
+		{"Thin", "Low", "Vacc Suit", 0.0, 0.5},
+		{"Unusual", "Varies", "Varies", 0.1, 25},
+	}
+
+	hydroDetails = []hydrologyDetail{
+		{"0% - 5%", 5, "Desert World"},
+		{"6% - 15%", 15, "Dry World"},
+		{"16% - 25%", 25, "A few small seas"},
+		{"26% - 35%", 35, ""},
+		{"36% - 45%", 45, "Wet World"},
+		{"46% - 55%", 55, "Large Oceans"},
+		{"56% - 65%", 65, "Small seas and oceans."},
+		{"66% - 75%", 75, "Earth-like world"},
+		{"76% - 85%", 85, "Water World"},
+		{"86% - 95%", 95, "A few small islands and archipelagos"},
+		{"96% - 100%", 100, "Almost Entirely Water"},
 	}
 
 	Scout = starBase{
@@ -82,19 +131,51 @@ var (
 		scout_base, reserach_base,
 		pirate_base,
 	)
-
-	sizeOffset int
 )
 
 func (s *system) init(box *widget.Box) {
 
-	s.Size = byte(zero_to_ten())
-	sizeOffset = trv_to_int(s.Size)
-	size.SetText(sz + " " +
-		string(s.Size) + ", " + sizeDetails[sizeOffset].size + ", " +
-		"gravity " + sizeDetails[sizeOffset].gravity)
-	atmosphere = widget.NewLabel(atmos)
-	hydrology = widget.NewLabel(hydro)
+	// Filling out the System structure, Size first
+	s.Size = int8(zero_to_ten())
+	fmt.Print(s.Size)
+	size.SetText(sz + " " + string(trv_int[s.Size]) + ", " +
+		sizeDetails[s.Size].size + ", gravity " + sizeDetails[s.Size].gravity)
+
+	// Continue filling out the System structure, Atmosphere next
+	randomAtmosphere := zero_to_ten() + s.Size - 5
+	if randomAtmosphere < 0 {
+		randomAtmosphere = 0
+	}
+	if randomAtmosphere > 15 {
+		randomAtmosphere = 15
+	}
+	s.Atmosphere = randomAtmosphere
+	atmosphere.SetText(atmos + " " +
+		string(trv_int[s.Atmosphere]) + ", " + atmosphereDetails[s.Atmosphere].description +
+		", pressure " + atmosphereDetails[s.Atmosphere].pressure +
+		", gear required: " + atmosphereDetails[s.Atmosphere].gear,
+	)
+	// Continue w/System structure, Hydrology next
+	if s.Size < 2 {
+		s.Hydrology = 0
+	} else {
+		s.Hydrology = zero_to_ten() - 5 + s.Size
+		switch s.Atmosphere {
+		case 0, 1, 10, 11, 12:
+			s.Hydrology = s.Hydrology - 4
+		}
+		if s.Hydrology < 0 {
+			s.Hydrology = 0
+		}
+		if s.Hydrology > 10 {
+			s.Hydrology = 10
+		}
+	}
+	hydrology.SetText(hydro + " " +
+		string(trv_int[s.Hydrology]) + ", " +
+		hydroDetails[s.Hydrology].description + ", range of " +
+		hydroDetails[s.Hydrology].hydroRange,
+	)
 	population = widget.NewLabel(pop)
 	government = widget.NewLabel(gov)
 	law_level = widget.NewLabel(law)
@@ -108,22 +189,10 @@ func (s *system) init(box *widget.Box) {
 	box.Children = append(box.Children, systemDetailsBox)
 }
 
-func (s *system) generateAtmos(sys_size byte) (randomAtmorsphere byte) {
-	randomAtmosphere := zero_to_ten() + sys_size - 5
-	if randomAtmosphere < 0 {
-		randomAtmosphere = 0
-	}
-	return
+func zero_to_ten() int8 {
+	return int8(6*rand.Float32()) + int8(6*rand.Float32())
 }
 
-func zero_to_ten() byte {
-	return byte(6*rand.Float32()) + byte(6*rand.Float32())
-}
-
-func two_to_twelve() byte {
+func two_to_twelve() int8 {
 	return zero_to_ten() + 2
-}
-
-func trv_to_int(tint byte) int {
-	return int(tint - '0')
 }
