@@ -9,23 +9,36 @@ type starBase struct {
 	bDescription string
 }
 
+type planet struct {
+	content    string
+	satellites string
+	rings      string
+}
 type system struct {
-	Size      int8
-	numStars  int8
-	starTypes []string
-	//numPlanets       int8
-	//numGasGiants     int8
-	//numAsteroids     int8
-	UWP              string
-	Atmosphere       int8
-	Hydrology        int8
-	Population       int8
-	Government       int8
-	Law_Level        int8
-	NumFactions      int8
-	Factions         []int8
-	Technology_Level int8
-	Starport         int8
+	Size               int8
+	numStars           int8
+	starTypes          []string
+	Close_Companion    bool
+	Epistellar_planets int8
+	EpiPlanets         []planet
+	Inner_Planets      int8
+	InPlanets          []planet
+	Moderate_Companion bool
+	Outer_Planets      int8
+	OutPlanets         []planet
+	Distant_Companion  bool
+	numGasGiants       int8
+	numAsteroids       int8
+	UWP                string
+	Atmosphere         int8
+	Hydrology          int8
+	Population         int8
+	Government         int8
+	Law_Level          int8
+	NumFactions        int8
+	Factions           []int8
+	Technology_Level   int8
+	Starport           int8
 	//bases            []starBase
 }
 
@@ -48,6 +61,7 @@ var (
 	}
 
 	uw_profile       = widget.NewLabel("")
+	stars            = widget.NewLabel("")
 	size             = widget.NewLabel("")
 	atmosphere       = widget.NewLabel("")
 	hydrology        = widget.NewLabel("")
@@ -63,7 +77,7 @@ var (
 
 	systemDetailsBox = widget.NewVBox(
 		uw_profile, widget.NewLabel("System Details"),
-		size, atmosphere, hydrology,
+		stars, size, atmosphere, hydrology,
 		population, government,
 		law_level, technology_level,
 		starport, military_base,
@@ -73,6 +87,7 @@ var (
 )
 
 func (s *system) init(box *widget.Box) {
+	s.getStars()
 	s.getSize()
 	s.getAtmosphere()
 	s.getHydrology()

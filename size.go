@@ -6,11 +6,6 @@ type sizeDetail struct {
 	g       float32
 }
 
-type starSystem struct {
-	description string
-	count       int
-}
-
 var (
 	sizeDetails = []sizeDetail{
 		{"800 km", "Negligible", 0.0},
@@ -25,20 +20,6 @@ var (
 		{"14,400 km", "1.25G", 1.25},
 		{"16,000 km", "1.4G", 1.4},
 	}
-
-	starCounts = []starSystem{
-		{"Solitary star, primary is ", 1},
-		{"Binary stars, primary is ", 2},
-		{"Trinary stars, primary is ", 3},
-	}
-	starTypes = []string{
-		"Type A",
-		"Type F",
-		"Type G",
-		"Type K",
-		"Type M",
-		"Type L",
-	}
 )
 
 // Filling out the System structure's Size, adding the text to
@@ -46,65 +27,7 @@ var (
 func (s *system) getSize() {
 	s.Size = int8(zero_to_ten())
 
-	starDetails := s.getStarsDetails()
-	size.SetText(starCounts[s.numStars-1].description +
-		starDetails + "\n" +
-		sz + " " + string(trv_int[s.Size]) + ", " +
+	size.SetText(sz + " " + string(trv_int[s.Size]) + ", " +
 		sizeDetails[s.Size].size + ", gravity " +
 		sizeDetails[s.Size].gravity)
-}
-
-func (s *system) getStarsDetails() string {
-	switch zero_to_fifteen() {
-	case 0, 1, 2, 3, 4, 5, 6, 7:
-		s.numStars = 1
-	case 8, 9, 10, 11, 12:
-		s.numStars = 2
-	case 13, 14, 15:
-		s.numStars = 3
-	default:
-		s.numStars = 1
-	}
-	s.starTypes = make([]string, s.numStars)
-	return s.getStarTypes()
-}
-
-func (s *system) getStarTypes() (result string) {
-	switch two_to_twelve() {
-	case 2:
-		s.starTypes[0] = starTypes[0]
-	case 3:
-		s.starTypes[0] = starTypes[1]
-	case 4:
-		s.starTypes[0] = starTypes[2]
-	case 5:
-		s.starTypes[0] = starTypes[3]
-	case 6, 7, 8, 9, 10, 11, 12, 13:
-		s.starTypes[0] = starTypes[4]
-	default:
-		s.starTypes[0] = starTypes[3]
-	}
-	result = s.starTypes[0]
-	if s.numStars > 1 {
-		for i := 1; i < int(s.numStars); i++ {
-			switch zero_to_five() {
-			case 0:
-				s.starTypes[i] = starTypes[0]
-			case 1:
-				s.starTypes[i] = starTypes[1]
-			case 2:
-				s.starTypes[i] = starTypes[2]
-			case 3:
-				s.starTypes[i] = starTypes[3]
-			case 4, 5, 6:
-				s.starTypes[i] = starTypes[4]
-			default:
-				s.starTypes[i] = starTypes[3]
-			}
-			result += ", secondary " + s.starTypes[i]
-		}
-		result += "\n"
-
-	}
-	return
 }
