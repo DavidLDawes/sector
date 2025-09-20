@@ -10,12 +10,13 @@ type starBase struct {
 }
 
 type system struct {
-	Size             int8
-	numStars         int8
-	starTypes        []string
-	numPlanets       int8
-	numGasGiants     int8
-	numAsteroids     int8
+	Size      int8
+	numStars  int8
+	starTypes []string
+	//numPlanets       int8
+	//numGasGiants     int8
+	//numAsteroids     int8
+	UWP              string
 	Atmosphere       int8
 	Hydrology        int8
 	Population       int8
@@ -25,7 +26,7 @@ type system struct {
 	Factions         []int8
 	Technology_Level int8
 	Starport         int8
-	bases            []starBase
+	//bases            []starBase
 }
 
 var (
@@ -46,6 +47,7 @@ var (
 		"The presence of a pirate base in a system indicates that a group of thieves is active in the area. Pirates are unlikely to be operating out of the starport itself (except on a Law Level 0 world), but no doubt have agents at the port on the lookout for likely prey.",
 	}
 
+	uw_profile       = widget.NewLabel("")
 	size             = widget.NewLabel("")
 	atmosphere       = widget.NewLabel("")
 	hydrology        = widget.NewLabel("")
@@ -60,7 +62,7 @@ var (
 	pirate_base      = widget.NewLabel("")
 
 	systemDetailsBox = widget.NewVBox(
-		widget.NewLabel("System Details"),
+		uw_profile, widget.NewLabel("System Details"),
 		size, atmosphere, hydrology,
 		population, government,
 		law_level, technology_level,
@@ -77,9 +79,8 @@ func (s *system) init(box *widget.Box) {
 	s.getPopulation()
 	s.getGovernment()
 	s.getLaw()
-
-	technology_level.SetText(tech)
-	starport.SetText(sp)
+	s.getStarport()
+	s.getTechLevel()
 	military_base.SetText(mil)
 	scout_base.SetText(scout)
 	reserach_base.SetText(res)

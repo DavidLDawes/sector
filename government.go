@@ -7,28 +7,28 @@ import (
 var (
 	govDetails = []string{
 		"None",
-		"Company/Corporation",
-		"Participating Democracy",
-		"Self-Perpetuating Oligarchy",
-		"Representative Democracy",
-		"Feudal Technocracy",
-		"Captive Government",
-		"Balkanisation",
-		"Civil Service Bureaucracy",
-		"Impersonal Bureaucracy",
-		"Charismatic Dictator",
-		"Non-Charistmatic Dictator",
-		"Charismatic Oligarchy",
-		"Religious Dictatorship",
+		"Company/Corporation ",
+		"Participating Democracy ",
+		"Self-Perpetuating Oligarchy ",
+		"Representative Democracy ",
+		"Feudal Technocracy ",
+		"Captive Government ",
+		"Balkanisation ",
+		"Civil Service Bureaucracy ",
+		"Impersonal Bureaucracy ",
+		"Charismatic Dictator ",
+		"Non-Charistmatic Dictator ",
+		"Charismatic Oligarchy ",
+		"Religious Dictatorship ",
 	}
 
 	importance = []string{
-		" Importance: Obscure",
-		" Importance: Fringe",
-		" Importance: Minor",
-		" Importance: Notable",
-		" Importance: Significant",
-		" Importance: Overwhelming",
+		" Importance: Obscure ",
+		" Importance: Fringe ",
+		" Importance: Minor ",
+		" Importance: Notable ",
+		" Importance: Significant ",
+		" Importance: Overwhelming ",
 	}
 )
 
@@ -50,7 +50,7 @@ func (s *system) getGovernment() {
 		s.NumFactions = 0
 	}
 
-	govText := gov + " " + govDetails[s.Government]
+	govText := gov + govDetails[s.Government]
 	if s.NumFactions > 0 {
 		s.Factions = make([]int8, s.NumFactions)
 		for i := int8(0); i < s.NumFactions; i++ {

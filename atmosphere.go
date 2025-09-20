@@ -39,10 +39,10 @@ func (s *system) getAtmosphere() {
 		randomAtmosphere = 15
 	}
 	s.Atmosphere = randomAtmosphere
-	atmosphere.SetText(atmos + " " +
-		string(trv_int[s.Atmosphere]) + ", " + atmosphereDetails[s.Atmosphere].description +
-		", pressure " + atmosphereDetails[s.Atmosphere].pressure +
-		", gear required: " + atmosphereDetails[s.Atmosphere].gear,
+	atmosphere.SetText(atmos + string(trv_int[s.Atmosphere]) + ", " +
+		atmosphereDetails[s.Atmosphere].description + ", pressure " +
+		atmosphereDetails[s.Atmosphere].pressure + ", gear required: " +
+		atmosphereDetails[s.Atmosphere].gear,
 	)
 
 }

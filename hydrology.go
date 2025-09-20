@@ -11,7 +11,7 @@ var (
 		{"0% - 5%", 5, "Desert World"},
 		{"6% - 15%", 15, "Dry World"},
 		{"16% - 25%", 25, "A few small seas"},
-		{"26% - 35%", 35, ""},
+		{"26% - 35%", 35, "Small to medium seas"},
 		{"36% - 45%", 45, "Wet World"},
 		{"46% - 55%", 55, "Large Oceans"},
 		{"56% - 65%", 65, "Small seas and oceans."},
