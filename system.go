@@ -14,12 +14,13 @@ type planet struct {
 	satellites string
 	rings      string
 }
+
 type system struct {
 	Size               int8
 	numStars           int8
 	starTypes          []string
 	Close_Companion    bool
-	Epistellar_planets int8
+	Epistellar_Planets int8
 	EpiPlanets         []planet
 	Inner_Planets      int8
 	InPlanets          []planet

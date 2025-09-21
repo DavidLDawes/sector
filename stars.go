@@ -75,36 +75,195 @@ func (s *system) getPlanetDetails() (result string) {
 	}
 
 	remainingGasGiants := s.numGasGiants
+	countGasGiants := 0
 	if s.Close_Companion {
-		s.Epistellar_planets = 0
+		s.Epistellar_Planets = 0
 	} else {
-		s.Epistellar_planets = zero_to_five() - 2
-		if s.Epistellar_planets < 0 {
-			s.Epistellar_planets = 0
-		} else if s.Epistellar_planets > 2 {
-			s.Epistellar_planets = 2
+		s.Epistellar_Planets = zero_to_five() - 2
+		if s.Epistellar_Planets < 0 {
+			s.Epistellar_Planets = 0
+		} else if s.Epistellar_Planets > 2 {
+			s.Epistellar_Planets = 2
 		}
 	}
-	s.EpiPlanets = make([]planet, s.Epistellar_planets)
-	if s.Epistellar_planets > 0 && remainingGasGiants > 0 {
-		if s.Epistellar_planets > remainingGasGiants {
-			for i := 0; i < int(remainingGasGiants); i++ {
-				s.EpiPlanets[i] = planet{planetTypes[4], "", ""}
-			}
-			for i := remainingGasGiants; i < s.Epistellar_planets; i++ {
 
+	epiList := ""
+	s.EpiPlanets = make([]planet, s.Epistellar_Planets)
+	if s.Epistellar_Planets > 0 && remainingGasGiants > 0 {
+		if s.Epistellar_Planets > remainingGasGiants {
+			for i := 0; i < int(remainingGasGiants); i++ {
+				numSat := zero_to_five() + 1
+				if zero_to_five() < 5 {
+					// All satelites are dwarfs
+					if numSat == 1 {
+						s.EpiPlanets[i] = planet{planetTypes[4], "Sattelite " +
+							planetTypes[1], ""}
+						countGasGiants++
+						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+					} else {
+						s.EpiPlanets[i] = planet{planetTypes[4], "Satellite " +
+							strconv.Itoa(int(numSat)) + "x " + planetTypes[1], ""}
+						countGasGiants++
+						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+					}
+				} else {
+					// One satellite is terrestrial
+					if numSat == 1 {
+						s.EpiPlanets[i] = planet{planetTypes[4], "Satellite " +
+							planetTypes[2], ""}
+						countGasGiants++
+						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+					} else if numSat == 2 {
+						s.EpiPlanets[i] = planet{planetTypes[4], "Satellites " +
+							planetTypes[2] + " & " + planetTypes[1], ""}
+						countGasGiants++
+						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+					} else {
+						s.EpiPlanets[i] = planet{planetTypes[4], "Sattelites " +
+							planetTypes[2] + strconv.Itoa(int(numSat)) +
+							"x " + planetTypes[1], ""}
+						countGasGiants++
+						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+					}
+				}
+			}
+			for i := remainingGasGiants; i < s.Epistellar_Planets; i++ {
 				s.EpiPlanets[i] = s.getPlanet()
+				if s.EpiPlanets[i].content[0:3] == planetTypes[4][0:3] {
+					// Another gas giant
+					countGasGiants++
+				}
+				epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
 			}
 			remainingGasGiants = 0
 		} else {
 			// more gas giants than epistellar planet slots to put them in
-			for i := 0; i < int(s.Epistellar_planets); i++ {
+			for i := 0; i < int(s.Epistellar_Planets); i++ {
 				s.EpiPlanets[i] = planet{planetTypes[4], "", ""}
+				countGasGiants++
+				epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
 			}
-			remainingGasGiants -= s.Epistellar_planets
+			remainingGasGiants -= s.Epistellar_Planets
+		}
+	} else if s.Epistellar_Planets > 0 {
+		for i := 0; i < int(s.Epistellar_Planets); i++ {
+			s.EpiPlanets[i] = s.getPlanet()
+			if s.EpiPlanets[i].content[0:3] == planetTypes[4][0:3] {
+				// Another gas giant
+				countGasGiants++
+			}
+			epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+		}
+
+	}
+
+	inList := ""
+	s.Inner_Planets = zero_to_five()
+	if s.starTypes[0] == starTypes[4] {
+		// Type M star is -1
+		s.Inner_Planets--
+	}
+	if s.Inner_Planets < 0 {
+		s.Inner_Planets = 0
+	}
+
+	s.InPlanets = make([]planet, s.Inner_Planets)
+	if s.Inner_Planets > 0 && remainingGasGiants > 0 {
+		if s.Inner_Planets > remainingGasGiants {
+			for i := 0; i < int(remainingGasGiants); i++ {
+				s.InPlanets[i] = planet{planetTypes[4], "", ""}
+				countGasGiants++
+				inList += s.InPlanets[i].content + ", " + s.InPlanets[i].satellites + "\n"
+			}
+			for i := remainingGasGiants; i < s.Inner_Planets; i++ {
+				s.InPlanets[i] = s.getPlanet()
+				if s.InPlanets[i].content[0:3] == planetTypes[4][0:3] {
+					// Another gas giant
+					countGasGiants++
+				}
+				inList += s.InPlanets[i].content + ", " + s.InPlanets[i].satellites + "\n"
+			}
+			remainingGasGiants = 0
+		} else {
+			// more gas giants than inner planet slots to put them in
+			for i := 0; i < int(s.Inner_Planets); i++ {
+				s.InPlanets[i] = planet{planetTypes[4], "", ""}
+				inList += s.InPlanets[i].content + ", " + s.InPlanets[i].satellites + "\n"
+			}
+			remainingGasGiants -= s.Inner_Planets
+		}
+	} else if s.Inner_Planets > 0 {
+		for i := 0; i < int(s.Inner_Planets); i++ {
+			s.InPlanets[i] = s.getPlanet()
+			if s.InPlanets[i].content[0:3] == planetTypes[4][0:3] {
+				// Another gas giant
+				countGasGiants++
+			}
+			inList += s.InPlanets[i].content + ", " + s.InPlanets[i].satellites + "\n"
 		}
 	}
-	result = "Gas Giants: " + string(trv_int[s.numGasGiants]) + ", Epistellar planets: " + string(trv_int[s.Epistellar_planets])
+
+	outList := ""
+	s.Outer_Planets = zero_to_five()
+	if s.starTypes[0] == starTypes[4] {
+		// Type M star is -1
+		s.Outer_Planets--
+	}
+	if s.Moderate_Companion {
+		// Moderate companion star clears out outer planets some...
+		s.Outer_Planets--
+	}
+	if s.Outer_Planets < 0 {
+		s.Outer_Planets = 0
+	}
+
+	s.OutPlanets = make([]planet, s.Outer_Planets)
+	if s.Outer_Planets > 0 && remainingGasGiants > 0 {
+		if s.Outer_Planets > remainingGasGiants {
+			for i := 0; i < int(remainingGasGiants); i++ {
+				s.OutPlanets[i] = planet{planetTypes[4], "", ""}
+				countGasGiants++
+				outList += s.OutPlanets[i].content + ", " + s.OutPlanets[i].satellites + "\n"
+			}
+			for i := remainingGasGiants; i < s.Outer_Planets; i++ {
+				s.OutPlanets[i] = s.getPlanet()
+				if s.OutPlanets[i].content[0:3] == planetTypes[4][0:3] {
+					// Another gas giant
+					countGasGiants++
+				}
+				outList += s.OutPlanets[i].content + ", " + s.OutPlanets[i].satellites + "\n"
+			}
+			remainingGasGiants = 0
+		} else {
+			// more gas giants than outer planet slots to put them in
+			for i := 0; i < int(s.Outer_Planets); i++ {
+				s.OutPlanets[i] = planet{planetTypes[4], "", ""}
+				countGasGiants++
+				outList += s.OutPlanets[i].content + ", " + s.OutPlanets[i].satellites + "\n"
+			}
+			remainingGasGiants -= s.Outer_Planets
+		}
+	} else if s.Outer_Planets > 0 {
+		for i := 0; i < int(s.Outer_Planets); i++ {
+			s.OutPlanets[i] = s.getPlanet()
+			outList += s.OutPlanets[i].content + ", " + s.OutPlanets[i].satellites + "\n"
+		}
+	}
+
+	result = ""
+	if s.Epistellar_Planets > 0 {
+		result = "\nEpistellar planets: " + strconv.Itoa(int(s.Epistellar_Planets)) +
+			"\n" + epiList
+	}
+	if s.Inner_Planets > 0 {
+		result += "\nInner planets: " + strconv.Itoa(int(s.Inner_Planets)) +
+			"\n" + inList
+	}
+	if s.Outer_Planets > 0 {
+		result += "\nOuter planets: " + strconv.Itoa(int(s.Outer_Planets)) +
+			"\n" + outList
+	}
+	result += "\nGas Giants: " + strconv.Itoa(int(countGasGiants))
 	return
 }
 
