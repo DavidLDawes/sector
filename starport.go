@@ -8,12 +8,12 @@ type starportDetail struct {
 var (
 	starPortDetails = []starportDetail{
 		{"No Starport. No provision is made for any ship landings. ", starportNone},
-		{"Frontier Installation. Essentially a marked spot of bedrock with no fuel, facilities, or bases present.",
+		{"Frontier Installation. Essentially a marked spot of bedrock with no fuel,\nfacilities, or bases present.",
 			starportE},
-		{"Poor Quality. Only unrefined fuel available. No repair facilities present. Scout base may be present.", starportD},
-		{"Routine Quality. Only unrefined fuel available. Reasonable repair facilities present. Scout base may be present.", starportC},
-		{"Good Quality. Refined fuel available. Annual maintenance overhaul available. Shipyard capable of constructing non-starships present. Naval base and/or scout base may be present.", starportB},
-		{"Excellent Quality. Refined fuel available. Annual maintenance overhaul available. Shipyard capable of constructing starships and non-starships present. Naval base and/or scout base may be present.", starportA},
+		{"Poor Quality. Only unrefined fuel available. No repair facilities present.\nScout base may be present.", starportD},
+		{"Routine Quality. Only unrefined fuel available. Reasonable repair facilities\npresent. Scout base may be present.", starportC},
+		{"Good Quality. Refined fuel available. Annual maintenance overhaul available.\nShipyard capable of constructing non-starships present. Naval base and/or scout\nbase may be present.", starportB},
+		{"Excellent Quality. Refined fuel available. Annual maintenance overhaul available.\nShipyard capable of constructing starships and non-starships present. Naval\nbase and/or scout base may be present.", starportA},
 	}
 )
 
