@@ -40,27 +40,10 @@ type system struct {
 	Factions           []int8
 	Technology_Level   int8
 	Starport           int8
-	//bases            []starBase
+	bases              []starBase
 }
 
 var (
-	Scout = starBase{
-		"Scout",
-		"A scout base offers refined fuel and supplies to scout ships.",
-	}
-	Research = starBase{
-		"Research",
-		"A Research base is dedicated to a particular field of research.",
-	}
-	Consulate = starBase{
-		"Consulate",
-		"A consulate is an administration office for various departments such as commerce, justice and foreign affairs. Characters wishing to report significant crimes or obtain various permits will need to visit a consulate.",
-	}
-	Pirate = starBase{
-		"Pirate",
-		"The presence of a pirate base in a system indicates that a group of thieves is active in the area. Pirates are unlikely to be operating out of the starport itself (except on a Law Level 0 world), but no doubt have agents at the port on the lookout for likely prey.",
-	}
-
 	uw_profile       = widget.NewLabel("")
 	stars            = widget.NewLabel("")
 	size             = widget.NewLabel("")
@@ -71,19 +54,14 @@ var (
 	law_level        = widget.NewLabel("")
 	technology_level = widget.NewLabel("")
 	starport         = widget.NewLabel("")
-	military_base    = widget.NewLabel("")
-	scout_base       = widget.NewLabel("")
-	reserach_base    = widget.NewLabel("")
-	pirate_base      = widget.NewLabel("")
+	bases            = widget.NewLabel("")
 
 	systemDetailsBox = widget.NewVBox(
 		uw_profile, widget.NewLabel("System Details"),
 		stars, size, atmosphere, hydrology,
 		population, government,
 		law_level, technology_level,
-		starport, military_base,
-		scout_base, reserach_base,
-		pirate_base,
+		starport, bases,
 	)
 )
 
@@ -97,10 +75,7 @@ func (s *system) init(box *widget.Box) {
 	s.getLaw()
 	s.getStarport()
 	s.getTechLevel()
-	military_base.SetText(mil)
-	scout_base.SetText(scout)
-	reserach_base.SetText(res)
-	pirate_base.SetText(pir)
+	s.getBases()
 
 	box.Children = append(box.Children, systemDetailsBox)
 }

@@ -15,7 +15,7 @@ var (
 		{"Industrial", "Widespread electrification, telecommunications and internal combustion."},
 		{"Industrial", "Fission power and more advanced computing."},
 		{"Pre-Stellar", "A pre-stellar society can reach orbit reliably and has telecommunications\nsatellites."},
-		{"Pre-Stellar", "At TL 8, it is possible to reach other worlds in the same system, although\nterraforming or full\ncolonisation are not within reach."},
+		{"Pre-Stellar", "At TL 8, it is possible to reach other worlds in the same system, although\nterraforming or full colonisation are not within reach."},
 		{"Pre-Stellar", "Gravity manipulation, which makes space travel vastly safer and faster."},
 		{"Early Stellar", "With the advent of Jump, nearby systems are opened up."},
 		{"Early Stellar", "The first true artificial intelligences become possible, as computers are\nable to model synaptic networks."},

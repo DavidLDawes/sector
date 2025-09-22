@@ -1,6 +1,9 @@
 package main
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 type starSystem struct {
 	description string
@@ -66,14 +69,14 @@ func (s *system) getStarsDetails() string {
 }
 
 func (s *system) getPlanetDetails() (result string) {
-	s.numGasGiants = int8(0)
 	if s.Close_Companion {
 		s.Epistellar_Planets = 0
 	} else {
 		s.Epistellar_Planets = zero_to_five() - 2
 		if s.Epistellar_Planets < 0 {
 			s.Epistellar_Planets = 0
-		} else if s.Epistellar_Planets > 2 {
+		}
+		if s.Epistellar_Planets > 2 {
 			s.Epistellar_Planets = 2
 		}
 	}
@@ -81,35 +84,41 @@ func (s *system) getPlanetDetails() (result string) {
 	epiList := ""
 	s.EpiPlanets = make([]planet, s.Epistellar_Planets)
 	if s.Epistellar_Planets > 0 {
+		fmt.Print("Epi: " + strconv.Itoa(int(s.Epistellar_Planets)))
 		for i := 0; i < int(s.Epistellar_Planets); i++ {
-			numSat := zero_to_five() + 1
-			if zero_to_five() < 5 {
-				// All satelites are dwarfs
-				if numSat == 1 {
-					s.EpiPlanets[i] = planet{planetTypes[4], "Sattelite " +
-						planetTypes[1], ""}
-					epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+			s.EpiPlanets[i] = s.getPlanet()
+			fmt.Print("s.EpiPlanet[i].content: " + s.EpiPlanets[i].content)
+			if s.EpiPlanets[i].content[0:2] == planetTypes[4][0:2] {
+				numSat := zero_to_five() + 1
+				if zero_to_five() < 5 {
+					// All satelites are dwarfs
+					if numSat == 1 {
+						s.EpiPlanets[i].satellites = "Sattelite " + planetTypes[1]
+						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+					} else {
+						s.EpiPlanets[i].satellites = "Satellite " + strconv.Itoa(int(numSat)) + "x " + planetTypes[1]
+						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+					}
 				} else {
-					s.EpiPlanets[i] = planet{planetTypes[4], "Satellite " +
-						strconv.Itoa(int(numSat)) + "x " + planetTypes[1], ""}
-					epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+					// One satellite is terrestrial
+					if numSat == 1 {
+						s.EpiPlanets[i].satellites = "Satellite " + planetTypes[2]
+						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+					} else if numSat == 2 {
+						s.EpiPlanets[i].satellites = "Satellites " + planetTypes[2] + " & " + planetTypes[1]
+						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+					} else {
+						s.EpiPlanets[i].satellites = "Sattelites " + planetTypes[2] + strconv.Itoa(int(numSat)) +
+							"x " + planetTypes[1]
+						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+					}
 				}
-			} else {
-				// One satellite is terrestrial
-				if numSat == 1 {
-					s.EpiPlanets[i] = planet{planetTypes[4], "Satellite " +
-						planetTypes[2], ""}
-					epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
-				} else if numSat == 2 {
-					s.EpiPlanets[i] = planet{planetTypes[4], "Satellites " +
-						planetTypes[2] + " & " + planetTypes[1], ""}
-					epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
-				} else {
-					s.EpiPlanets[i] = planet{planetTypes[4], "Sattelites " +
-						planetTypes[2] + strconv.Itoa(int(numSat)) +
-						"x " + planetTypes[1], ""}
-					epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
-				}
+			}
+			if s.EpiPlanets[i].content[0:2] == planetTypes[0][0:2] {
+				s.numAsteroids++
+			}
+			if s.EpiPlanets[i].content[0:2] == planetTypes[4][0:2] {
+				s.numGasGiants++
 			}
 		}
 	}
@@ -128,6 +137,13 @@ func (s *system) getPlanetDetails() (result string) {
 	if s.Inner_Planets > 0 {
 		for i := 0; i < int(s.Inner_Planets); i++ {
 			s.InPlanets[i] = s.getPlanet()
+			if s.InPlanets[i].content[0:2] == planetTypes[0][0:2] {
+				s.numAsteroids++
+			}
+			if s.InPlanets[i].content[0:2] == planetTypes[4][0:2] {
+				s.numGasGiants++
+			}
+
 			inList += s.InPlanets[i].content + ", " + s.InPlanets[i].satellites + "\n"
 		}
 	}
@@ -150,6 +166,12 @@ func (s *system) getPlanetDetails() (result string) {
 	if s.Outer_Planets > 0 {
 		for i := 0; i < int(s.Outer_Planets); i++ {
 			s.OutPlanets[i] = s.getPlanet()
+			if s.OutPlanets[i].content[0:2] == planetTypes[0][0:2] {
+				s.numAsteroids++
+			}
+			if s.OutPlanets[i].content[0:2] == planetTypes[4][0:2] {
+				s.numGasGiants++
+			}
 			outList += s.OutPlanets[i].content + ", " + s.OutPlanets[i].satellites + "\n"
 		}
 	}
@@ -167,6 +189,8 @@ func (s *system) getPlanetDetails() (result string) {
 		result += "\nOuter planets: " + strconv.Itoa(int(s.Outer_Planets)) +
 			"\n" + outList
 	}
+	result += "\nAsteroid Belts: " + strconv.Itoa(int(s.numAsteroids))
+	result += ", Gas Giants: " + strconv.Itoa(int(s.numGasGiants))
 	return
 }
 
@@ -239,7 +263,7 @@ func (s *system) getPlanet() planet {
 	switch zero_to_five() + delta {
 	case -1, 0:
 		if zero_to_five() > 3 {
-			return planet{planetTypes[0], "Mostly Dwarf planetodis, one " + planetTypes[1], ""}
+			return planet{planetTypes[0], "Mostly Dwarf planetoids, one " + planetTypes[1], ""}
 		} else {
 			return planet{planetTypes[0], "", ""}
 		}
