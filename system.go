@@ -5,8 +5,8 @@ import (
 )
 
 type starBase struct {
-	bType        string
-	bDescription string
+	base        string
+	description string
 }
 
 type planet struct {
@@ -41,6 +41,7 @@ type system struct {
 	Technology_Level   int8
 	Starport           int8
 	bases              []starBase
+	textBox            widget.Box
 }
 
 var (
@@ -55,17 +56,23 @@ var (
 	technology_level = widget.NewLabel("")
 	starport         = widget.NewLabel("")
 	bases            = widget.NewLabel("")
+	generateAgain    widget.Button
+)
 
-	systemDetailsBox = widget.NewVBox(
+func (s *system) init(box widget.Box) {
+	s.createSystem()
+	s.textBox = box
+	s.textBox = *widget.NewVBox(
 		uw_profile, widget.NewLabel("System Details"),
 		stars, size, atmosphere, hydrology,
 		population, government,
 		law_level, technology_level,
 		starport, bases,
 	)
-)
+	s.initButton()
+}
 
-func (s *system) init(box *widget.Box) {
+func (s *system) createSystem() {
 	s.getStars()
 	s.getSize()
 	s.getAtmosphere()
@@ -77,5 +84,6 @@ func (s *system) init(box *widget.Box) {
 	s.getTechLevel()
 	s.getBases()
 
-	box.Children = append(box.Children, systemDetailsBox)
+	s.initButton()
+	s.textBox.Children = append(s.textBox.Children, &generateAgain)
 }

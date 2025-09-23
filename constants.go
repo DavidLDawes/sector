@@ -14,11 +14,23 @@ const (
 	law   = string("Law Level ")
 	tech  = string("Technology Level ")
 	sp    = string("Starport class ")
+	anc   = string("Ancient Artifact")
 	mil   = string("Military Base")
-	scout = string("Scout Base")
-	res   = string("Research Base")
+	nav   = string("Naval Base")
+	merch = string("Merchant Base")
+	mega  = string("Megacorp Home or Major Office")
+	sct   = string("Scout Base")
+	host  = string("Scout Hostel")
 	pir   = string("Pirate Base")
+	rsrch = string("Research Canter")
+	hosp  = string("University Hospital and Medical Center")
+	cons  = string("Imperial Consulate")
 	uwp   = string("Universal World Profile ")
+	uni   = string("University and Research Hospital")
+	chap  = string("Traveller's Aid Society Chapter House")
+	trv   = string("Traveller's Aid Society Hostel")
+	first = string("Traveller's Aid Society First Class Hostel")
+	yard  = "Starship Yard"
 
 	starportNone = 'X'
 	starportE    = 'E'
