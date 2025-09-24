@@ -3,7 +3,7 @@ package main
 var (
 	Scout = starBase{
 		sct,
-		" Offers customized docking, pickup for X-Boats, refined\nfuel and supplies to nscout ships and couriers.\n",
+		" Offers customized docking, pickup for X-Boats, refined\nfuel and supplies to scout ships and couriers.\n",
 	}
 	Research = starBase{
 		rsrch,
@@ -31,7 +31,7 @@ var (
 	}
 	Yard = starBase{
 		yard,
-		" Ship manufacturing, refit, repair, and servicing\nfacilities, nusually in orbit.\n",
+		" Ship manufacturing, refit, repair, and servicing facilities,\nusually in orbit.\n",
 	}
 
 	Megacorp = starBase{
@@ -41,7 +41,7 @@ var (
 
 	Naval = starBase{
 		nav,
-		" Naval warships and service vessels are stationed or based\nhere, along with the facilities, administrative and personnel resources these\nfleets require. Plenty of business and indusrty driven by the Navy.\n",
+		" Naval warships and service vessels are stationed or based here,\nalong with the facilities, administrative and personnel resources these fleets\nrequire. Plenty of business and indusrty driven by the Navy.\n",
 	}
 
 	University = starBase{
@@ -66,7 +66,7 @@ var (
 
 	Firstclass = starBase{
 		first,
-		" All the comforts, features asnd luxuries you could ask\nfor (if you can afford them). Free room and board for TAS members.\n",
+		" All the comforts, features and luxuries you could ask\nfor (if you can afford them). Free room and board for TAS members.\n",
 	}
 )
 

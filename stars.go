@@ -110,6 +110,8 @@ func (s *system) getPlanetDetails() (result string) {
 						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
 					}
 				}
+			} else {
+				epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
 			}
 			if s.EpiPlanets[i].content[0:2] == planetTypes[0][0:2] {
 				s.numAsteroids++
