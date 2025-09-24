@@ -6,19 +6,33 @@ var trv_int = []byte("0123456789ABCDEFGHJKLMNPQRSTUVWXYZ")
 //  it continues through the rest of the alphabet
 
 const (
-	sz    = string("Planet Size ")
-	atmos = string("Atmosphere ")
-	hydro = string("Hydrology")
-	pop   = string("Population ")
-	gov   = string("Government ")
-	law   = string("Law Level ")
-	tech  = string("Technology Level ")
-	sp    = string("Starport class ")
-	mil   = string("Military Base")
-	scout = string("Scout Base")
-	res   = string("Research Base")
-	pir   = string("Pirate Base")
-	uwp   = string("Universal World Profile ")
+	sz    = "Planet Size "
+	atmos = "Atmosphere "
+	hydro = "Hydrology"
+	pop   = "Population "
+	gov   = "Government "
+	law   = "Law Level "
+	tech  = "Technology Level "
+	sp    = "Starport class "
+	anc   = "Ancient Artifact"
+	mil   = "Military Base"
+	scout = "Scout Base"
+	res   = "Research Base"
+	nav   = "Naval Base"
+	merch = "Merchant Base"
+	mega  = "Megacorp Home or Major Office"
+	sct   = "Scout Base"
+	host  = "Scout Hostel"
+	pir   = "Pirate Base"
+	rsrch = "Research Canter"
+	hosp  = "University Hospital and Medical Center"
+	cons  = "Imperial Consulate"
+	uwp   = "Universal World Profile "
+	uni   = "University and Research Hospital"
+	chap  = "Traveller's Aid Society Chapter House"
+	trv   = "Traveller's Aid Society Hostel"
+	first = "Traveller's Aid Society First Class Hostel"
+	yard  = "Starship Yard"
 
 	starportNone = 'X'
 	starportE    = 'E'

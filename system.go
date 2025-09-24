@@ -5,8 +5,8 @@ import (
 )
 
 type starBase struct {
-	bType        string
-	bDescription string
+	base        string
+	description string
 }
 
 type planet struct {
