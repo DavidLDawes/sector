@@ -5,16 +5,17 @@ import (
 	"fyne.io/fyne/widget"
 )
 
-var nextSys system
+var (
+	nextSys   system
+	nextSysUI widget.Box
+)
 
 func main() {
-	nextSysUI := widget.NewVBox()
-
 	a := app.New()
 	w := a.NewWindow("Taveller SRD System Generator")
 
-	nextSys.init(nextSysUI)
+	nextSys.init()
 
-	w.SetContent(nextSysUI)
+	w.SetContent(&nextSysUI)
 	w.ShowAndRun()
 }

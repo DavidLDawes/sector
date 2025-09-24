@@ -2,20 +2,67 @@ package main
 
 var (
 	Scout = starBase{
-		"Scout",
-		"A scout base offers refined fuel and supplies to scout ships.",
+		sct,
+		" Offers customized docking, pickup for X-Boats, refined fuel and supplies to\nscout ships and couriers.\n",
 	}
 	Research = starBase{
-		"Research",
-		"A Research base is dedicated to a particular field of research.",
+		rsrch,
+		" Large organization dedicated to a particular field of research.\n",
 	}
 	Consulate = starBase{
-		"Consulate",
-		"A consulate is an administration office for various departments such as commerce, justice and foreign affairs. Characters wishing to report significant crimes or obtain various permits will need to visit a consulate.",
+		cons,
+		" Administration office for various departments such as commerce,\njustice and foreign affairs. Characters wishing to report significant crimes or\nobtain various permits will need to visit a consulate.\n",
 	}
 	Pirate = starBase{
-		"Pirate",
-		"The presence of a pirate base in a system indicates that a group of thieves is active in the area. Pirates are unlikely to be operating out of the starport itself (except on a Law Level 0 world), but no doubt have agents at the port on the lookout for likely prey.",
+		pir,
+		" The presence of a pirate base in a system indicates that a group of\nthieves is active in the area. Pirates are unlikely to be operating out of the\nstarport itself (except on a Law Level 0 world), but no doubt have agents at the\nport on the lookout for likely prey.\n",
+	}
+	Ancient = starBase{
+		anc,
+		" Archeological treasure troves from a long vanished race with\noccasionally very high tech items on a random planet or moon.\n",
+	}
+	Merchant = starBase{
+		merch,
+		" Trading and import/export infrastructure with warehouses, markets,\ncargo docks, and regular starship visits.\n",
+	}
+	Yard = starBase{
+		yard,
+		" Ship manufacturing, refit, repair, and servicing facilities,\nusually in orbit\n",
+	}
+
+	Megacorp = starBase{
+		mega,
+		" Huge corporate entity with vast resources and capital,\ndrives tech improvement and industries with plenty of ancilliary business\nopportunities.\n",
+	}
+
+	Naval = starBase{
+		nav,
+		" Naval warships and service vessels are stationed or based\nhere, along with the facilities, administrative and personnel resources these\nfleets require. Plenty of business and indusrty driven by the Navy.\n",
+	}
+
+	University = starBase{
+		uni,
+		" Medical Center and Research Hospital, drives medical and\nbiological advances, jobs, and commerce.\n",
+	}
+
+	Hostel = starBase{
+		host,
+		" Hostel for Scout personnel, mostly pilots waiting to\nrelieve X-Boat pilots.\n",
+	}
+
+	Travellers = starBase{
+		trv,
+		" Low end facility, reasonable rooms well secured, not fancy.\n",
+	}
+
+	Chapter = starBase{
+		chap,
+		" Full time staffed office, legal, cultural, commercial and\npolitical contacts available, reasonable budgets and connections.\n",
+	}
+
+	Firstclass = starBase{
+		first,
+		" All the comforts, features asnd luxuries you could ask\nfor (if you can afford them). Free room and board for TAS members.\n",
 	}
 )
 
@@ -33,7 +80,7 @@ func (s system) getBases() {
 	merchant := false
 	yard := false
 	megacorp := false
-	imperial := false
+	consulate := false
 	naval := false
 	switch s.Starport {
 	case 5:
@@ -54,7 +101,7 @@ func (s system) getBases() {
 		}
 
 		if zero_to_ten() > 3 {
-			imperial = true
+			consulate = true
 			numBases++
 		}
 		if zero_to_ten() > 5 {
@@ -73,7 +120,7 @@ func (s system) getBases() {
 			numBases++
 		}
 		if zero_to_ten() > 5 {
-			imperial = true
+			consulate = true
 			numBases++
 		}
 		if zero_to_ten() > 5 {
@@ -91,7 +138,7 @@ func (s system) getBases() {
 			numBases++
 		}
 		if zero_to_ten() > 7 {
-			imperial = true
+			consulate = true
 			numBases++
 		}
 	}
@@ -145,15 +192,18 @@ func (s system) getBases() {
 		// A
 		if zero_to_ten() > 7 {
 			scout = true
+			numBases++
 		}
 	case 4, 3:
 		// B or C
 		roll := zero_to_ten()
 		if roll > 5 {
 			scout = true
+			numBases++
 		}
 		if roll > 8 {
 			hostel = true
+			numBases++
 		}
 	}
 
@@ -166,83 +216,122 @@ func (s system) getBases() {
 		roll := zero_to_ten()
 		if roll > 4 {
 			firstclass = true
+			numBases++
 		} else if roll > 1 {
 			travellers = true
+			numBases++
 		}
 		if roll > 7 {
 			chapter = true
+			numBases++
 		}
 	case 4:
 		// B
 		roll := zero_to_ten()
 		if roll > 6 {
 			firstclass = true
+			numBases++
 		} else if roll > 3 {
 			travellers = true
+			numBases++
 		}
 	case 3:
 		// C
 		if zero_to_ten() > 7 {
 			travellers = true
+			numBases++
 		}
 	}
 
+	s.bases = make([]starBase, numBases)
+	i := 0
 	// Build a string with all the bases
 	allBases := ""
 	// Ancient Artifact?
 	if ancient {
-		allBases += "Ancient Artifact (random planet)\n"
+		allBases += Ancient.base + " " + Ancient.description
+		s.bases[i] = Ancient
+		i++
 	}
 
 	if merchant {
-		allBases += "Merchant Base\n"
+		allBases += Merchant.base + " " + Merchant.description
+		s.bases[i] = Merchant
+		i++
 	}
 	if yard {
-		allBases += "Starship Yard\n"
+		allBases += Yard.base + " " + Yard.description
+		s.bases[i] = Yard
+		i++
+
 	}
 
 	if megacorp {
-		allBases += "Megacorp Home Office\n"
+		allBases += Megacorp.base + " " + Megacorp.description
+		s.bases[i] = Megacorp
+		i++
 	}
 
-	if imperial {
-		allBases += "Imperial Consulate\n"
+	if consulate {
+		allBases += Consulate.base + " " + Consulate.description
+		s.bases[i] = Consulate
+		i++
+
 	}
 
 	if naval {
-		allBases += "Naval Base\n"
+		allBases += Naval.base + " " + Naval.description
+		s.bases[i] = Naval
+		i++
+
 	}
 
 	if pirate {
-		allBases += "pirate Base\n"
+		allBases += Pirate.base + " " + Pirate.description
+		s.bases[i] = Pirate
+		i++
 	}
 
 	if research {
-		allBases += "Research Base\n"
+		allBases += Research.base + " " + Research.description
+		s.bases[i] = Research
+		i++
 	}
 
 	if university {
-		allBases += "University and Research Hospital\n"
+		allBases += University.base + " " + University.description
+		s.bases[i] = University
+		i++
 	}
 
 	if scout {
-		allBases += "Scout Base\n"
+		allBases += Scout.base + " " + Scout.description
+		s.bases[i] = Scout
+		i++
 	}
 
 	if hostel {
-		allBases += "Scout Hostel\n"
+		allBases += Hostel.base + " " + Hostel.description
+		s.bases[i] = Hostel
+		i++
 	}
 
 	if travellers {
-		allBases += "Traveller's Aid Society Hostel\n"
+		allBases += Travellers.base + " " + Travellers.description
+		s.bases[i] = Travellers
+		i++
 	}
 
 	if firstclass {
-		allBases += "Traveller's Aid Society First Class Hotel\n"
+		allBases += Firstclass.base + " " + Firstclass.description
+		s.bases[i] = Firstclass
+		i++
 	}
 
 	if chapter {
-		allBases += "Traveller's Aid Society Chapter House\n"
+		allBases += Chapter.base + " " + Chapter.description
+		s.bases[i] = Chapter
+		i++
 	}
 
 	bases.SetText(allBases)

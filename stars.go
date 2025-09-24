@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -84,10 +83,8 @@ func (s *system) getPlanetDetails() (result string) {
 	epiList := ""
 	s.EpiPlanets = make([]planet, s.Epistellar_Planets)
 	if s.Epistellar_Planets > 0 {
-		fmt.Print("Epi: " + strconv.Itoa(int(s.Epistellar_Planets)))
 		for i := 0; i < int(s.Epistellar_Planets); i++ {
 			s.EpiPlanets[i] = s.getPlanet()
-			fmt.Print("s.EpiPlanet[i].content: " + s.EpiPlanets[i].content)
 			if s.EpiPlanets[i].content[0:2] == planetTypes[4][0:2] {
 				numSat := zero_to_five() + 1
 				if zero_to_five() < 5 {
@@ -333,7 +330,7 @@ func (s *system) getPlanet() planet {
 					planetTypes[2] + " & " + planetTypes[1], ""}
 			} else {
 				return planet{planetTypes[4], "Sattelites " +
-					planetTypes[2] + strconv.Itoa(int(numSat)) +
+					planetTypes[2] + " & " + strconv.Itoa(int(numSat)) +
 					"x " + planetTypes[1], ""}
 			}
 		}
