@@ -59,9 +59,9 @@ var (
 	generateAgain    widget.Button
 )
 
-func (s *system) init(box widget.Box) {
+func (s *system) init() {
+	s.textBox = *widget.NewVBox()
 	s.createSystem()
-	s.textBox = box
 	s.textBox = *widget.NewVBox(
 		uw_profile, widget.NewLabel("System Details"),
 		stars, size, atmosphere, hydrology,
@@ -83,7 +83,6 @@ func (s *system) createSystem() {
 	s.getStarport()
 	s.getTechLevel()
 	s.getBases()
-
 	s.initButton()
 	s.textBox.Children = append(s.textBox.Children, &generateAgain)
 }

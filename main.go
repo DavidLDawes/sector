@@ -11,17 +11,11 @@ var (
 )
 
 func main() {
-	nextSysUI := widget.NewVBox()
-
 	a := app.New()
 	w := a.NewWindow("Taveller SRD System Generator")
 
-	nextSys.init(*nextSysUI)
+	nextSys.init()
 
-	w.SetContent(nextSysUI)
+	w.SetContent(&nextSysUI)
 	w.ShowAndRun()
-}
-
-func getBox() *widget.Box {
-	return &nextSysUI
 }
