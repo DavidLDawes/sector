@@ -55,13 +55,14 @@ var (
 	technology_level = widget.NewLabel("")
 	starport         = widget.NewLabel("")
 	bases            = widget.NewLabel("")
+	trade_codes      = widget.NewLabel("")
 
 	systemDetailsBox = widget.NewVBox(
 		uw_profile, widget.NewLabel("System Details"),
 		stars, size, atmosphere, hydrology,
 		population, government,
 		law_level, technology_level,
-		starport, bases,
+		starport, bases, trade_codes,
 	)
 )
 
@@ -76,6 +77,7 @@ func (s *system) init(box *widget.Box) {
 	s.getStarport()
 	s.getTechLevel()
 	s.getBases()
+	s.getCodes()
 
 	box.Children = append(box.Children, systemDetailsBox)
 }
