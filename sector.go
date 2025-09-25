@@ -2,6 +2,7 @@ package main
 
 import (
 	"strconv"
+	"strings"
 
 	"fyne.io/fyne"
 	"fyne.io/fyne/widget"
@@ -31,48 +32,68 @@ func (s sector) init(b *widget.Box) {
 	maxPop := int8(-1)
 	s.system_list = ""
 	maxTech := int8(-1)
-	numMax := 0
+	sysPerLine := 0
+	numPopMax := 0
+	numTechMax := 0
 	for row := 0; row < 10; row++ {
 		for column := 0; column < 8; column++ {
 			if zero_to_one() == 1 {
-				nxtSys := systemGrid[column][row]
-				nxtSys.init(&nxtUI)
+				systemGrid[column][row].init(&nxtUI)
 				b.Children = make([]fyne.CanvasObject, 0)
 				systems++
 
-				s.system_list += strconv.Itoa(column) + strconv.Itoa(row) +
-					" " + uw_profile.Text + "\n"
+				if sysPerLine%3 == 0 && sysPerLine > 0 {
+					s.system_list += "\n"
+				}
+				sysPerLine++
 
-				nxtPop := nxtSys.Population
-				totalPop += int(nxtPop)
+				s.system_list += strconv.Itoa(column) + strconv.Itoa(row) +
+					" " + uw_profile.Text +
+					strings.Repeat(" ", 32-len(systemGrid[column][row].Codes))
+
+				nxtPop := systemGrid[column][row].Population
+				totalPop += int(systemGrid[column][row].PopulationCount)
 				if nxtPop > maxPop {
-					numMax = 1
+					numPopMax = 1
 					maxPop = nxtPop
 					s.population_report = "Maximum population " + strconv.Itoa(int(maxPop)) +
 						" in " + strconv.Itoa(column) + strconv.Itoa(row) +
 						" " + uw_profile.Text
 				} else if nxtPop == maxPop {
-					numMax++
-					if numMax&1 == 0 {
+					numPopMax++
+					if numPopMax&1 == 0 {
 						s.population_report += ", "
 					}
 					s.population_report += strconv.Itoa(column) + strconv.Itoa(row) +
 						" " + uw_profile.Text
-					if numMax&1 == 0 {
+					if numPopMax&1 == 0 {
 						s.population_report += "\n"
 					}
 				}
 
-				nxtTech := nxtSys.Technology_Level
+				nxtTech := systemGrid[column][row].Technology_Level
 				if nxtTech > maxTech {
+					numPopMax = 1
 					maxTech = nxtTech
 					s.technology_report = "Maximum technolgy level " + strconv.Itoa(int(maxTech)) +
 						" in " + strconv.Itoa(column) + strconv.Itoa(row) +
 						" " + uw_profile.Text
+				} else if nxtTech == maxTech {
+					numTechMax++
+					if numTechMax&1 == 0 {
+						s.technology_report += ", "
+					}
+					s.technology_report += strconv.Itoa(column) + strconv.Itoa(row) +
+						" " + uw_profile.Text
+					if numTechMax&1 == 0 {
+						s.technology_report += "\n"
+					}
 				}
 			}
 		}
 	}
+	s.population_report += "Total sector population " +
+		strconv.Itoa(totalPop) + "\n"
 	system_list.SetText(s.system_list)
 	pop_report.SetText(s.population_report)
 	tech_report.SetText(s.technology_report)

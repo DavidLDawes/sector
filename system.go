@@ -42,6 +42,7 @@ type system struct {
 	Technology_Level   int8
 	Starport           int8
 	bases              []starBase
+	Codes              string
 }
 
 var (
