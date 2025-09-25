@@ -31,8 +31,9 @@ func (s sector) init(b *widget.Box) {
 	maxPop := int8(-1)
 	s.system_list = ""
 	maxTech := int8(-1)
-	for column := 0; column < 8; column++ {
-		for row := 0; row < 10; row++ {
+	numMax := 0
+	for row := 0; row < 10; row++ {
+		for column := 0; column < 8; column++ {
 			if zero_to_one() == 1 {
 				nxtSys := systemGrid[column][row]
 				nxtSys.init(&nxtUI)
@@ -45,10 +46,21 @@ func (s sector) init(b *widget.Box) {
 				nxtPop := nxtSys.Population
 				totalPop += int(nxtPop)
 				if nxtPop > maxPop {
+					numMax = 1
 					maxPop = nxtPop
 					s.population_report = "Maximum population " + strconv.Itoa(int(maxPop)) +
 						" in " + strconv.Itoa(column) + strconv.Itoa(row) +
-						" " + uw_profile.Text + "\n"
+						" " + uw_profile.Text
+				} else if nxtPop == maxPop {
+					numMax++
+					if numMax&1 == 0 {
+						s.population_report += ", "
+					}
+					s.population_report += strconv.Itoa(column) + strconv.Itoa(row) +
+						" " + uw_profile.Text
+					if numMax&1 == 0 {
+						s.population_report += "\n"
+					}
 				}
 
 				nxtTech := nxtSys.Technology_Level
@@ -56,7 +68,7 @@ func (s sector) init(b *widget.Box) {
 					maxTech = nxtTech
 					s.technology_report = "Maximum technolgy level " + strconv.Itoa(int(maxTech)) +
 						" in " + strconv.Itoa(column) + strconv.Itoa(row) +
-						" " + uw_profile.Text + "\n"
+						" " + uw_profile.Text
 				}
 			}
 		}
