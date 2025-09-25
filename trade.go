@@ -34,7 +34,7 @@ var (
 // Also fill-in the ShortCodes. adding them to the UWP profile
 func (s *system) getCodes() {
 	codes := ""
-	compressed := "\n"
+	compressed := "  "
 	// Agricultural: Atmos 4-9, Hydro 4-8, Pop 5-7
 	if s.Atmosphere > 3 && s.Atmosphere < 10 &&
 		s.Hydrology > 3 && s.Hydrology < 9 &&

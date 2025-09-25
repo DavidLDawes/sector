@@ -27,7 +27,7 @@ const (
 	rsrch = "Research Canter"
 	hosp  = "University Hospital and Medical Center"
 	cons  = "Imperial Consulate"
-	uwp   = "Universal World Profile "
+	uwp   = "UWP "
 	uni   = "University and Research Hospital"
 	chap  = "Traveller's Aid Society Chapter House"
 	trv   = "Traveller's Aid Society Hostel"

@@ -24,6 +24,11 @@ func zero_to_two() int8 {
 	return int8(3 * rand.Float32())
 }
 
+// Two values, 50/50 (all equally likely)
+func zero_to_one() int8 {
+	return int8(2 * rand.Float32())
+}
+
 // Nine possible values, all equally likely, 1-9
 func one_to_nine() int8 {
 	return int8(9*rand.Float32()) + 1

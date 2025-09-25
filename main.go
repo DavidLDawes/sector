@@ -6,16 +6,20 @@ import (
 )
 
 var (
-	nextSys   system
-	nextSysUI widget.Box
+	nextSys    system
+	mySector   sector
+	nxtUI      widget.Box
+	systemGrid [8][10]system
 )
 
 func main() {
+	mySector.init(&nxtUI)
+
 	a := app.New()
-	w := a.NewWindow("Taveller SRD System Generator")
+	w := a.NewWindow("Taveller SRD Sector Generator")
 
-	nextSys.init(&nextSysUI)
+	//nextSys.init(&nxtUI)
+	w.SetContent(&nxtUI)
 
-	w.SetContent(&nextSysUI)
 	w.ShowAndRun()
 }

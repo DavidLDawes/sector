@@ -7,24 +7,24 @@ import (
 func (s *system) getPopulation() {
 	// Continue w/System structure, Population next
 	s.Population = zero_to_ten()
-	popTotal := int(1)
 	if s.Population == 0 {
-		popTotal = 0
-	}
-	for i := 0; i < int(s.Population); i++ {
-		popTotal = popTotal * 10
-	}
-	factor := int(1)
-	if popTotal > 1000 {
-		factor = int(one_to_nine())
+		s.PopulationCount = 0
 	} else {
-		// bias tiny settlements to a bit higher numbers
-		factor = int(7 + zero_to_two())
+		s.PopulationCount = 1
+		for i := 0; i < int(s.Population); i++ {
+			s.PopulationCount = s.PopulationCount * 10
+		}
+		if s.PopulationCount > 1000 {
+
+			s.PopulationCount = s.PopulationCount * int(one_to_nine())
+		} else {
+			// bias tiny settlements to a the higher end of the range
+			s.PopulationCount = s.PopulationCount * int((7 + zero_to_two()))
+		}
 	}
-	popTotal = popTotal * factor
 
 	population.SetText(pop + " " +
 		string(trv_int[s.Population]) + ", " +
-		strconv.Itoa(popTotal),
+		strconv.Itoa(s.PopulationCount),
 	)
 }

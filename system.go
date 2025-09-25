@@ -34,6 +34,7 @@ type system struct {
 	Atmosphere         int8
 	Hydrology          int8
 	Population         int8
+	PopulationCount    int
 	Government         int8
 	Law_Level          int8
 	NumFactions        int8
@@ -75,7 +76,7 @@ func (s *system) init(box *widget.Box) {
 	s.getGovernment()
 	s.getLaw()
 	s.getStarport()
-	s.getTechLevel()
+	s.Technology_Level = s.getTechLevel()
 	s.getBases()
 	s.getCodes()
 

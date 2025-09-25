@@ -30,7 +30,7 @@ var (
 	}
 )
 
-func (s system) getTechLevel() {
+func (s system) getTechLevel() int8 {
 	s.Technology_Level = s.getTech()
 	technology_level.SetText(tech + string(trv_int[s.Technology_Level]) +
 		", " + techDetails[s.Technology_Level].description + "\n" +
@@ -43,6 +43,8 @@ func (s system) getTechLevel() {
 		string(trv_int[s.Law_Level]) + "-" +
 		string(trv_int[s.Technology_Level])
 	uw_profile.SetText(uwp + s.UWP)
+
+	return s.Technology_Level
 }
 
 // Because of all the dependencies, getTechLevel is the last of the top level get*
