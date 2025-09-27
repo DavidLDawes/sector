@@ -24,21 +24,24 @@ var (
 
 func (s *system) getHydrology() {
 	// Continue w/System structure, Hydrology next
-	if s.Size < 2 {
-		s.Hydrology = 0
-	} else {
-		s.Hydrology = zero_to_ten() - 5 + s.Size
-		switch s.Atmosphere {
-		case 0, 1, 10, 11, 12:
-			s.Hydrology = s.Hydrology - 4
-		}
-		if s.Hydrology < 0 {
+	if !s.Detailed {
+		if s.Size < 2 {
 			s.Hydrology = 0
-		}
-		if s.Hydrology > 10 {
-			s.Hydrology = 10
+		} else {
+			s.Hydrology = zero_to_ten() - 5 + s.Size
+			switch s.Atmosphere {
+			case 0, 1, 10, 11, 12:
+				s.Hydrology = s.Hydrology - 4
+			}
+			if s.Hydrology < 0 {
+				s.Hydrology = 0
+			}
+			if s.Hydrology > 10 {
+				s.Hydrology = 10
+			}
 		}
 	}
+
 	hydrology.SetText(hydro + " " +
 		string(trv_int[s.Hydrology]) + ", " +
 		hydroDetails[s.Hydrology].description + ", range of " +

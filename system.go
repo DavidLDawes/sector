@@ -41,8 +41,9 @@ type system struct {
 	Factions           []int8
 	Technology_Level   int8
 	Starport           int8
-	bases              []starBase
+	Bases              []starBase
 	Codes              string
+	Detailed           bool
 }
 
 var (
@@ -56,7 +57,7 @@ var (
 	law_level        = widget.NewLabel("")
 	technology_level = widget.NewLabel("")
 	starport         = widget.NewLabel("")
-	bases            = widget.NewLabel("")
+	Bases            = widget.NewLabel("")
 	trade_codes      = widget.NewLabel("")
 
 	systemDetailsBox = widget.NewVBox(
@@ -64,11 +65,20 @@ var (
 		stars, size, atmosphere, hydrology,
 		population, government,
 		law_level, technology_level,
-		starport, bases, trade_codes,
+		starport, Bases, trade_codes,
 	)
 )
 
 func (s *system) init(box *widget.Box) {
+	s.getDetails()
+	// All the details filled in, from here on out we can
+	// just get each one out of the text as needed.
+	s.Detailed = true
+
+	box.Children = append(box.Children, systemDetailsBox)
+}
+
+func (s *system) getDetails() {
 	s.getStars()
 	s.getSize()
 	s.getAtmosphere()
@@ -80,6 +90,4 @@ func (s *system) init(box *widget.Box) {
 	s.Technology_Level = s.getTechLevel()
 	s.getBases()
 	s.getCodes()
-
-	box.Children = append(box.Children, systemDetailsBox)
 }

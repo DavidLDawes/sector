@@ -30,19 +30,20 @@ var (
 )
 
 func (s *system) getAtmosphere() {
-	// Continue filling out the System structure, Atmosphere next
-	randomAtmosphere := zero_to_ten() + s.Size - 5
-	if randomAtmosphere < 0 {
-		randomAtmosphere = 0
+	if !s.Detailed {
+		// Continue filling out the System structure, Atmosphere next
+		randomAtmosphere := zero_to_ten() + s.Size - 5
+		if randomAtmosphere < 0 {
+			randomAtmosphere = 0
+		}
+		if randomAtmosphere > 15 {
+			randomAtmosphere = 15
+		}
+		s.Atmosphere = randomAtmosphere
 	}
-	if randomAtmosphere > 15 {
-		randomAtmosphere = 15
-	}
-	s.Atmosphere = randomAtmosphere
 	atmosphere.SetText(atmos + string(trv_int[s.Atmosphere]) + ", " +
 		atmosphereDetails[s.Atmosphere].description + ", pressure " +
 		atmosphereDetails[s.Atmosphere].pressure + ", gear required: " +
 		atmosphereDetails[s.Atmosphere].gear,
 	)
-
 }

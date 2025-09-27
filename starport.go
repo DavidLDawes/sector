@@ -8,7 +8,7 @@ type starportDetail struct {
 var (
 	starPortDetails = []starportDetail{
 		{"No Starport. No provision is made for any ship landings. ", starportNone},
-		{"Frontier Installation. Essentially a marked spot of\nbedrock with no fuel, facilities, or bases present.",
+		{"Frontier Installation. Essentially a marked spot of\nbedrock with no fuel, facilities, or Bases present.",
 			starportE},
 		{"Poor Quality. Only unrefined fuel available. No repair\nfacilities present.", starportD},
 		{"Routine Quality. Only unrefined fuel available. Reasonable\nrepair facilities present.", starportC},
@@ -18,22 +18,24 @@ var (
 )
 
 func (s *system) getStarport() {
-	// Continue filling out the System structure, Atmosphere next
-	switch zero_to_ten() {
-	case 0:
-		s.Starport = 0
-	case 1, 2:
-		s.Starport = 1
-	case 3, 4:
-		s.Starport = 2
-	case 5, 6:
-		s.Starport = 3
-	case 7, 8:
-		s.Starport = 4
-	case 9, 10, 11:
-		s.Starport = 5
-	default:
-		s.Starport = 3
+	if !s.Detailed {
+		// Continue filling out the System structure, Atmosphere next
+		switch zero_to_ten() {
+		case 0:
+			s.Starport = 0
+		case 1, 2:
+			s.Starport = 1
+		case 3, 4:
+			s.Starport = 2
+		case 5, 6:
+			s.Starport = 3
+		case 7, 8:
+			s.Starport = 4
+		case 9, 10, 11:
+			s.Starport = 5
+		default:
+			s.Starport = 3
+		}
 	}
 
 	starport.SetText(sp + string(starPortDetails[s.Starport].code) +

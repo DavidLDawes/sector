@@ -24,6 +24,7 @@ const (
 	sct   = "Scout Base"
 	host  = "Scout Hostel"
 	pir   = "Pirate Base"
+	hid   = "Hidden Pirate Base"
 	rsrch = "Research Canter"
 	hosp  = "University Hospital and Medical Center"
 	cons  = "Imperial Consulate"

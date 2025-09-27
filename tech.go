@@ -1,5 +1,7 @@
 package main
 
+import "strconv"
+
 type techDetail struct {
 	description string
 	details     string
@@ -31,17 +33,22 @@ var (
 )
 
 func (s system) getTechLevel() int8 {
-	s.Technology_Level = s.getTech()
+	if !s.Detailed {
+		s.Technology_Level = s.getTech()
+	}
 	technology_level.SetText(tech + string(trv_int[s.Technology_Level]) +
 		", " + techDetails[s.Technology_Level].description + "\n" +
 		techDetails[s.Technology_Level].details,
 	)
 
-	s.UWP = string(starPortDetails[s.Starport].code) + string(trv_int[s.Size]) +
-		string(trv_int[s.Atmosphere]) + string(trv_int[s.Hydrology]) +
-		string(trv_int[s.Population]) + string(trv_int[s.Government]) +
-		string(trv_int[s.Law_Level]) + "-" +
-		string(trv_int[s.Technology_Level])
+	s.UWP = strconv.Itoa(int(starPortDetails[s.Starport].code)) +
+		strconv.Itoa(int(trv_int[s.Size])) +
+		strconv.Itoa(int(trv_int[s.Atmosphere])) +
+		strconv.Itoa(int(trv_int[s.Hydrology])) +
+		strconv.Itoa(int(trv_int[s.Population])) +
+		strconv.Itoa(int(trv_int[s.Government])) +
+		strconv.Itoa(int(trv_int[s.Law_Level])) + "-" +
+		strconv.Itoa(int(trv_int[s.Technology_Level]))
 	uw_profile.SetText(uwp + s.UWP)
 
 	return s.Technology_Level

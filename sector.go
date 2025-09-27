@@ -28,7 +28,7 @@ var (
 
 func (s sector) init(b *widget.Box) {
 	systems := 0
-	totalPop := 0
+	totalPop := int64(0)
 	maxPop := int8(-1)
 	s.system_list = ""
 	maxTech := int8(-1)
@@ -49,10 +49,10 @@ func (s sector) init(b *widget.Box) {
 
 				s.system_list += strconv.Itoa(column) + strconv.Itoa(row) +
 					" " + uw_profile.Text +
-					strings.Repeat(" ", 32-len(systemGrid[column][row].Codes))
+					strings.Repeat(" ", int(1.25*float32((32-len(systemGrid[column][row].Codes)))))
 
 				nxtPop := systemGrid[column][row].Population
-				totalPop += int(systemGrid[column][row].PopulationCount)
+				totalPop += int64(systemGrid[column][row].PopulationCount)
 				if nxtPop > maxPop {
 					numPopMax = 1
 					maxPop = nxtPop
@@ -92,10 +92,41 @@ func (s sector) init(b *widget.Box) {
 			}
 		}
 	}
-	s.population_report += "Total sector population " +
-		strconv.Itoa(totalPop) + "\n"
+	thousandPop := int(totalPop % 1000)
+	thousands := totalPop / 1000
+	millionPop := int(thousands % 1000)
+	millions := thousands / 1000
+	billionPop := int(millions % 1000)
+	popWithCommas := ""
+
+	if billionPop > 0 {
+		// Got billions then we may need leading zeros for millions
+		popWithCommas = strconv.Itoa(billionPop) + "," +
+			normalize(millionPop) + "," +
+			normalize(thousandPop)
+	} else {
+		if millionPop > 0 {
+			popWithCommas = strconv.Itoa(millionPop) + "," +
+				normalize(thousandPop)
+		} else {
+			popWithCommas = strconv.Itoa(thousandPop)
+		}
+	}
+
+	s.population_report += "\nTotal sector population " + popWithCommas + "\n"
 	system_list.SetText(s.system_list)
 	pop_report.SetText(s.population_report)
 	tech_report.SetText(s.technology_report)
 	b.Children = append(b.Children, sectorDetailsBox)
+}
+
+func normalize(threeDigits int) string {
+	norm := strconv.Itoa(threeDigits)
+	if len(norm) == 1 {
+		norm += "00"
+
+	} else if len(norm) == 2 {
+		norm += "0"
+	}
+	return norm
 }

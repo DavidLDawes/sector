@@ -46,145 +46,147 @@ var (
 func (s *system) getStars() {
 	s.Size = int8(zero_to_ten())
 
-	starDetails := s.getStarsDetails()
-
 	stars.SetText(starCounts[s.numStars-1].description +
-		starDetails)
+		s.getStarsDetails())
+	s.Detailed = true
 }
 
 func (s *system) getStarsDetails() string {
-	switch zero_to_fifteen() {
-	case 0, 1, 2, 3, 4, 5, 6, 7:
-		s.numStars = 1
-	case 8, 9, 10, 11, 12:
-		s.numStars = 2
-	case 13, 14, 15:
-		s.numStars = 3
-	default:
-		s.numStars = 1
+	if !s.Detailed {
+		switch zero_to_fifteen() {
+		case 0, 1, 2, 3, 4, 5, 6, 7:
+			s.numStars = 1
+		case 8, 9, 10, 11, 12:
+			s.numStars = 2
+		case 13, 14, 15:
+			s.numStars = 3
+		default:
+			s.numStars = 1
+		}
+		s.starTypes = make([]string, s.numStars)
 	}
-	s.starTypes = make([]string, s.numStars)
 	return s.getStarTypes() + s.getPlanetDetails()
 }
 
 func (s *system) getPlanetDetails() (result string) {
-	if s.Close_Companion {
-		s.Epistellar_Planets = 0
-	} else {
-		s.Epistellar_Planets = zero_to_five() - 2
-		if s.Epistellar_Planets < 0 {
+	if !s.Detailed {
+		if s.Close_Companion {
 			s.Epistellar_Planets = 0
+		} else {
+			s.Epistellar_Planets = zero_to_five() - 2
+			if s.Epistellar_Planets < 0 {
+				s.Epistellar_Planets = 0
+			}
+			if s.Epistellar_Planets > 2 {
+				s.Epistellar_Planets = 2
+			}
 		}
-		if s.Epistellar_Planets > 2 {
-			s.Epistellar_Planets = 2
-		}
-	}
 
-	epiList := ""
-	s.EpiPlanets = make([]planet, s.Epistellar_Planets)
-	if s.Epistellar_Planets > 0 {
-		for i := 0; i < int(s.Epistellar_Planets); i++ {
-			s.EpiPlanets[i] = s.getPlanet()
-			if s.EpiPlanets[i].content[0:2] == planetTypes[4][0:2] {
-				numSat := zero_to_five() + 1
-				if zero_to_five() < 5 {
-					// All satelites are dwarfs
-					if numSat == 1 {
-						s.EpiPlanets[i].satellites = "Sattelite " + planetTypes[1]
-						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+		s.EpiPlanets = make([]planet, s.Epistellar_Planets)
+		if s.Epistellar_Planets > 0 {
+			for i := 0; i < int(s.Epistellar_Planets); i++ {
+				s.EpiPlanets[i] = s.getPlanet()
+				if s.EpiPlanets[i].content[0:2] == planetTypes[4][0:2] {
+					numSat := zero_to_five() + 1
+					if zero_to_five() < 5 {
+						// All satelites are dwarfs
+						if numSat == 1 {
+							s.EpiPlanets[i].satellites = "Sattelite " + planetTypes[1]
+						} else {
+							s.EpiPlanets[i].satellites = "Satellite " + strconv.Itoa(int(numSat)) + "x " + planetTypes[1]
+						}
 					} else {
-						s.EpiPlanets[i].satellites = "Satellite " + strconv.Itoa(int(numSat)) + "x " + planetTypes[1]
-						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
-					}
-				} else {
-					// One satellite is terrestrial
-					if numSat == 1 {
-						s.EpiPlanets[i].satellites = "Satellite " + planetTypes[2]
-						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
-					} else if numSat == 2 {
-						s.EpiPlanets[i].satellites = "Satellites " + planetTypes[2] + " & " + planetTypes[1]
-						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
-					} else {
-						s.EpiPlanets[i].satellites = "Sattelites " + planetTypes[2] + strconv.Itoa(int(numSat)) +
-							"x " + planetTypes[1]
-						epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
+						// One satellite is terrestrial
+						if numSat == 1 {
+							s.EpiPlanets[i].satellites = "Satellite " + planetTypes[2]
+						} else if numSat == 2 {
+							s.EpiPlanets[i].satellites = "Satellites " + planetTypes[2] + " & " + planetTypes[1]
+						} else {
+							s.EpiPlanets[i].satellites = "Sattelites " + planetTypes[2] + strconv.Itoa(int(numSat)) +
+								"x " + planetTypes[1]
+						}
 					}
 				}
-			} else {
-				epiList += s.EpiPlanets[i].content + ", " + s.EpiPlanets[i].satellites + "\n"
-			}
-			if s.EpiPlanets[i].content[0:2] == planetTypes[0][0:2] {
-				s.numAsteroids++
-			}
-			if s.EpiPlanets[i].content[0:2] == planetTypes[4][0:2] {
-				s.numGasGiants++
+				if s.EpiPlanets[i].content[0:2] == planetTypes[0][0:2] {
+					s.numAsteroids++
+				}
+				if s.EpiPlanets[i].content[0:2] == planetTypes[4][0:2] {
+					s.numGasGiants++
+				}
 			}
 		}
-	}
 
-	inList := ""
-	s.Inner_Planets = zero_to_five()
-	if s.starTypes[0][0:3] == starTypes[4][0:3] {
-		// Type M star is -1
-		s.Inner_Planets--
-	}
-	if s.Inner_Planets < 0 {
-		s.Inner_Planets = 0
-	}
-
-	s.InPlanets = make([]planet, s.Inner_Planets)
-	if s.Inner_Planets > 0 {
-		for i := 0; i < int(s.Inner_Planets); i++ {
-			s.InPlanets[i] = s.getPlanet()
-			if s.InPlanets[i].content[0:2] == planetTypes[0][0:2] {
-				s.numAsteroids++
-			}
-			if s.InPlanets[i].content[0:2] == planetTypes[4][0:2] {
-				s.numGasGiants++
-			}
-
-			inList += s.InPlanets[i].content + ", " + s.InPlanets[i].satellites + "\n"
+		s.Inner_Planets = zero_to_five()
+		if s.starTypes[0][0:3] == starTypes[4][0:3] {
+			// Type M star is -1
+			s.Inner_Planets--
 		}
-	}
+		if s.Inner_Planets < 0 {
+			s.Inner_Planets = 0
+		}
 
-	outList := ""
-	s.Outer_Planets = zero_to_five()
-	if s.starTypes[0] == starTypes[4] {
-		// Type M star is -1
-		s.Outer_Planets--
-	}
-	if s.Moderate_Companion {
-		// Moderate companion star clears out outer planets some...
-		s.Outer_Planets--
-	}
-	if s.Outer_Planets < 0 {
-		s.Outer_Planets = 0
-	}
+		s.InPlanets = make([]planet, s.Inner_Planets)
+		if s.Inner_Planets > 0 {
+			for i := 0; i < int(s.Inner_Planets); i++ {
+				s.InPlanets[i] = s.getPlanet()
+				if s.InPlanets[i].content[0:2] == planetTypes[0][0:2] {
+					s.numAsteroids++
+				}
+				if s.InPlanets[i].content[0:2] == planetTypes[4][0:2] {
+					s.numGasGiants++
+				}
+			}
+		}
 
-	s.OutPlanets = make([]planet, s.Outer_Planets)
-	if s.Outer_Planets > 0 {
-		for i := 0; i < int(s.Outer_Planets); i++ {
-			s.OutPlanets[i] = s.getPlanet()
-			if s.OutPlanets[i].content[0:2] == planetTypes[0][0:2] {
-				s.numAsteroids++
+		s.Outer_Planets = zero_to_five()
+		if s.starTypes[0] == starTypes[4] {
+			// Type M star is -1
+			s.Outer_Planets--
+		}
+		if s.Moderate_Companion {
+			// Moderate companion star clears out outer planets some...
+			s.Outer_Planets--
+		}
+		if s.Outer_Planets < 0 {
+			s.Outer_Planets = 0
+		}
+
+		s.OutPlanets = make([]planet, s.Outer_Planets)
+		if s.Outer_Planets > 0 {
+			for i := 0; i < int(s.Outer_Planets); i++ {
+				s.OutPlanets[i] = s.getPlanet()
+				if s.OutPlanets[i].content[0:2] == planetTypes[0][0:2] {
+					s.numAsteroids++
+				}
+				if s.OutPlanets[i].content[0:2] == planetTypes[4][0:2] {
+					s.numGasGiants++
+				}
 			}
-			if s.OutPlanets[i].content[0:2] == planetTypes[4][0:2] {
-				s.numGasGiants++
-			}
-			outList += s.OutPlanets[i].content + ", " + s.OutPlanets[i].satellites + "\n"
 		}
 	}
 
 	result = ""
+	epiList := ""
 	if s.Epistellar_Planets > 0 {
+		for i := 0; i < int(s.Outer_Planets); i++ {
+			epiList += s.OutPlanets[i].content + ", " + s.OutPlanets[i].satellites + "\n"
+		}
 		result = "\nEpistellar planets: " + strconv.Itoa(int(s.Epistellar_Planets)) +
 			"\n" + epiList
 	}
+	inList := ""
 	if s.Inner_Planets > 0 {
+		for i := 0; i < int(s.Outer_Planets); i++ {
+			inList += s.OutPlanets[i].content + ", " + s.OutPlanets[i].satellites + "\n"
+		}
 		result += "\nInner planets: " + strconv.Itoa(int(s.Inner_Planets)) +
 			"\n" + inList
 	}
+	outList := ""
 	if s.Outer_Planets > 0 {
+		for i := 0; i < int(s.Outer_Planets); i++ {
+			outList += s.OutPlanets[i].content + ", " + s.OutPlanets[i].satellites + "\n"
+		}
 		result += "\nOuter planets: " + strconv.Itoa(int(s.Outer_Planets)) +
 			"\n" + outList
 	}

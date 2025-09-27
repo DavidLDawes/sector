@@ -14,7 +14,7 @@ var (
 		" Administration office for various departments such as\ncommerce, justice and foreign affairs. Characters wishing to report significant\ncrimes or obtain various permits will need to visit a consulate.\n",
 	}
 	Hidden = starBase{
-		pir,
+		hid,
 		" The presence of a pirate base hidden in a system indicates\nthat a group of thieves is active in the area. Pirates will be operating out of\na remote base away from the starport itself; agents working for the pirates and\nsympathizers (their fences and suppliers too) at the starpot and they will be\non the lookout for likely prey.\n",
 	}
 	Pirate = starBase{
@@ -71,284 +71,307 @@ var (
 )
 
 func (s system) getBases() {
-	numBases := 0
-	// Ancient Site
-	ancient := false
-	if zero_to_ten() == 10 {
-		// 1 in 36
-		ancient = true
-		numBases++
-	}
-
-	// Imperial Consulate, Merchant Base & Naval Base all depend on starport
-	merchant := false
-	yard := false
-	megacorp := false
-	consulate := false
-	naval := false
-	switch s.Starport {
-	case 5:
-		// Merchant Base: Starport A, roll 6+ in 2D6 or 4+ on 2D0-10, above 3
-		// Imperial Consulate: Starport A, roll 6+ in 2D6 or 4+ on 2D0-10, "
-		roll := zero_to_ten()
-		if roll > 3 {
-			merchant = true
-			numBases++
-		}
-		if roll > 6 {
-			yard = true
-			numBases++
-		}
-		if roll > 9 {
-			megacorp = true
+	if !s.Detailed {
+		numBases := 0
+		// Ancient Site
+		ancient := false
+		if zero_to_ten() == 10 {
+			// 1 in 36
+			ancient = true
 			numBases++
 		}
 
-		if zero_to_ten() > 3 {
-			consulate = true
-			numBases++
-		}
-		if zero_to_ten() > 5 {
-			naval = true
-			numBases++
-		}
-	case 4:
-		// Starport B, roll 8+ in 2D6 or 6+ on 2D0-10
-		roll := zero_to_ten()
-		if roll > 5 {
-			merchant = true
-			numBases++
-		}
-		if roll > 8 {
-			yard = true
-			numBases++
-		}
-		if zero_to_ten() > 5 {
-			consulate = true
-			numBases++
-		}
-		if zero_to_ten() > 5 {
-			naval = true
-			numBases++
-		}
-	case 3:
-		// Starport C, roll 10+ in 2D6 or 8+ on 2D0-10
-		if zero_to_ten() > 5 {
-			naval = true
-			numBases++
-		}
-		if zero_to_ten() > 7 {
-			merchant = true
-			numBases++
-		}
-		if zero_to_ten() > 7 {
-			consulate = true
-			numBases++
-		}
-	}
-
-	// Pirate Base: Starport B: Throw 12+, Starport C: Throw 10+, Starport D or E: Throw 12+.
-	pirate := false
-	hidden := false
-	switch s.Starport {
-	case 4, 2, 1:
-		// B, D or E
-		if zero_to_ten() == 9 {
-
-			if s.Law_Level > 0 {
-				hidden = true
-			} else {
-				pirate = true
+		// Imperial Consulate, Merchant Base & Naval Base all depend on starport
+		merchant := false
+		yard := false
+		megacorp := false
+		consulate := false
+		naval := false
+		switch s.Starport {
+		case 5:
+			// Merchant Base: Starport A, roll 6+ in 2D6 or 4+ on 2D0-10, above 3
+			// Imperial Consulate: Starport A, roll 6+ in 2D6 or 4+ on 2D0-10, "
+			roll := zero_to_ten()
+			if roll > 3 {
+				merchant = true
+				numBases++
 			}
-			numBases++
+			if roll > 6 {
+				yard = true
+				numBases++
+			}
+			if roll > 9 {
+				megacorp = true
+				numBases++
+			}
+
+			if zero_to_ten() > 3 {
+				consulate = true
+				numBases++
+			}
+			if zero_to_ten() > 5 {
+				naval = true
+				numBases++
+			}
+		case 4:
+			// Starport B, roll 8+ in 2D6 or 6+ on 2D0-10
+			roll := zero_to_ten()
+			if roll > 5 {
+				merchant = true
+				numBases++
+			}
+			if roll > 8 {
+				yard = true
+				numBases++
+			}
+			if zero_to_ten() > 5 {
+				consulate = true
+				numBases++
+			}
+			if zero_to_ten() > 5 {
+				naval = true
+				numBases++
+			}
+		case 3:
+			// Starport C, roll 10+ in 2D6 or 8+ on 2D0-10
+			if zero_to_ten() > 5 {
+				naval = true
+				numBases++
+			}
+			if zero_to_ten() > 7 {
+				merchant = true
+				numBases++
+			}
+			if zero_to_ten() > 7 {
+				consulate = true
+				numBases++
+			}
 		}
-	case 3:
-		// C
-		if zero_to_ten() > 7 {
-			pirate = true
-			numBases++
+
+		// Pirate Base: Starport B: Throw 12+, Starport C: Throw 10+, Starport D or E: Throw 12+.
+		pirate := false
+		hidden := false
+		switch s.Starport {
+		case 4, 2, 1:
+			// B, D or E
+			if zero_to_ten() == 9 {
+
+				if s.Law_Level > 0 {
+					hidden = true
+				} else {
+					pirate = true
+				}
+				numBases++
+			}
+		case 3:
+			// C
+			if zero_to_ten() > 7 {
+				pirate = true
+				numBases++
+			}
+		}
+
+		// Research Base
+		research := false
+		university := false
+		switch s.Starport {
+		case 5:
+			// A
+			roll := zero_to_ten()
+			if roll > 5 {
+				research = true
+				numBases++
+			}
+			if roll > 8 {
+				university = true
+				numBases++
+			}
+		case 4, 3:
+			// B or C
+			if zero_to_ten() > 8 {
+				research = true
+				numBases++
+			}
+		}
+
+		// Scout Base
+		// Scout Hostel
+		scout := false
+		hostel := false
+		switch s.Starport {
+		case 5:
+			// A
+			if zero_to_ten() > 7 {
+				scout = true
+				numBases++
+			}
+		case 4, 3:
+			// B or C
+			roll := zero_to_ten()
+			if roll > 5 {
+				scout = true
+				numBases++
+			}
+			if roll > 8 {
+				hostel = true
+				numBases++
+			}
+		}
+
+		travellers := false
+		firstclass := false
+		chapter := false
+		switch s.Starport {
+		case 5:
+			// A
+			roll := zero_to_ten()
+			if roll > 4 {
+				firstclass = true
+				numBases++
+			} else if roll > 1 {
+				travellers = true
+				numBases++
+			}
+			if roll > 7 {
+				chapter = true
+				numBases++
+			}
+		case 4:
+			// B
+			roll := zero_to_ten()
+			if roll > 6 {
+				firstclass = true
+				numBases++
+			} else if roll > 3 {
+				travellers = true
+				numBases++
+			}
+		case 3:
+			// C
+			if zero_to_ten() > 7 {
+				travellers = true
+				numBases++
+			}
+
+		}
+
+		s.Bases = make([]starBase, numBases)
+		i := 0
+		// Build a string with all the Bases
+		// Ancient Artifact?
+		if ancient {
+			s.Bases[i] = Ancient
+			i++
+		}
+
+		if merchant {
+			s.Bases[i] = Merchant
+			i++
+		}
+		if yard {
+			s.Bases[i] = Yard
+			i++
+
+		}
+
+		if megacorp {
+			s.Bases[i] = Megacorp
+			i++
+		}
+
+		if consulate {
+			s.Bases[i] = Consulate
+			i++
+
+		}
+
+		if naval {
+			s.Bases[i] = Naval
+			i++
+
+		}
+
+		if hidden {
+			s.Bases[i] = Hidden
+			i++
+		}
+
+		if pirate {
+			s.Bases[i] = Pirate
+			i++
+		}
+
+		if research {
+			s.Bases[i] = Research
+			i++
+		}
+
+		if university {
+			s.Bases[i] = University
+			i++
+		}
+
+		if scout {
+			s.Bases[i] = Scout
+			i++
+		}
+
+		if hostel {
+			s.Bases[i] = Hostel
+			i++
+		}
+
+		if travellers {
+			s.Bases[i] = Travellers
+			i++
+		}
+
+		if firstclass {
+			s.Bases[i] = Firstclass
+			i++
+		}
+
+		if chapter {
+			s.Bases[i] = Chapter
+			i++
 		}
 	}
 
-	// Research Base
-	research := false
-	university := false
-	switch s.Starport {
-	case 5:
-		// A
-		roll := zero_to_ten()
-		if roll > 5 {
-			research = true
-			numBases++
-		}
-		if roll > 8 {
-			university = true
-			numBases++
-		}
-	case 4, 3:
-		// B or C
-		if zero_to_ten() > 8 {
-			research = true
-			numBases++
-		}
-	}
-
-	// Scout Base
-	// Scout Hostel
-	scout := false
-	hostel := false
-	switch s.Starport {
-	case 5:
-		// A
-		if zero_to_ten() > 7 {
-			scout = true
-			numBases++
-		}
-	case 4, 3:
-		// B or C
-		roll := zero_to_ten()
-		if roll > 5 {
-			scout = true
-			numBases++
-		}
-		if roll > 8 {
-			hostel = true
-			numBases++
-		}
-	}
-
-	travellers := false
-	firstclass := false
-	chapter := false
-	switch s.Starport {
-	case 5:
-		// A
-		roll := zero_to_ten()
-		if roll > 4 {
-			firstclass = true
-			numBases++
-		} else if roll > 1 {
-			travellers = true
-			numBases++
-		}
-		if roll > 7 {
-			chapter = true
-			numBases++
-		}
-	case 4:
-		// B
-		roll := zero_to_ten()
-		if roll > 6 {
-			firstclass = true
-			numBases++
-		} else if roll > 3 {
-			travellers = true
-			numBases++
-		}
-	case 3:
-		// C
-		if zero_to_ten() > 7 {
-			travellers = true
-			numBases++
-		}
-	}
-
-	s.bases = make([]starBase, numBases)
-	i := 0
-	// Build a string with all the bases
 	allBases := ""
-	// Ancient Artifact?
-	if ancient {
-		allBases += Ancient.base + " " + Ancient.description
-		s.bases[i] = Ancient
-		i++
+	for i := 0; i < len(s.Bases); i++ {
+		switch s.Bases[i].base {
+		case sct:
+			allBases += Scout.base + " " + Scout.description
+		case rsrch:
+			allBases += Research.base + " " + Research.description
+		case cons:
+			allBases += Consulate.base + " " + Consulate.description
+		case pir:
+			allBases += Pirate.base + " " + Pirate.description
+		case hid:
+			allBases += Hidden.base + " " + Hidden.description
+		case anc:
+			allBases += Ancient.base + " " + Ancient.description
+		case merch:
+			allBases += Merchant.base + " " + Merchant.description
+		case yard:
+			allBases += Yard.base + " " + Yard.description
+		case mega:
+			allBases += Megacorp.base + " " + Megacorp.description
+		case nav:
+			allBases += Naval.base + " " + Naval.description
+		case uni:
+			allBases += University.base + " " + University.description
+		case host:
+			allBases += Hostel.base + " " + Hostel.description
+		case trv:
+			allBases += Travellers.base + " " + Travellers.description
+		case chap:
+			allBases += Chapter.base + " " + Chapter.description
+		case first:
+			allBases += Firstclass.base + " " + Firstclass.description
+		default:
+		}
 	}
-
-	if merchant {
-		allBases += Merchant.base + " " + Merchant.description
-		s.bases[i] = Merchant
-		i++
-	}
-	if yard {
-		allBases += Yard.base + " " + Yard.description
-		s.bases[i] = Yard
-		i++
-
-	}
-
-	if megacorp {
-		allBases += Megacorp.base + " " + Megacorp.description
-		s.bases[i] = Megacorp
-		i++
-	}
-
-	if consulate {
-		allBases += Consulate.base + " " + Consulate.description
-		s.bases[i] = Consulate
-		i++
-
-	}
-
-	if naval {
-		allBases += Naval.base + " " + Naval.description
-		s.bases[i] = Naval
-		i++
-
-	}
-
-	if hidden {
-		allBases += Hidden.base + " " + Hidden.description
-		s.bases[i] = Hidden
-		i++
-	}
-
-	if pirate {
-		allBases += Pirate.base + " " + Pirate.description
-		s.bases[i] = Pirate
-		i++
-	}
-
-	if research {
-		allBases += Research.base + " " + Research.description
-		s.bases[i] = Research
-		i++
-	}
-
-	if university {
-		allBases += University.base + " " + University.description
-		s.bases[i] = University
-		i++
-	}
-
-	if scout {
-		allBases += Scout.base + " " + Scout.description
-		s.bases[i] = Scout
-		i++
-	}
-
-	if hostel {
-		allBases += Hostel.base + " " + Hostel.description
-		s.bases[i] = Hostel
-		i++
-	}
-
-	if travellers {
-		allBases += Travellers.base + " " + Travellers.description
-		s.bases[i] = Travellers
-		i++
-	}
-
-	if firstclass {
-		allBases += Firstclass.base + " " + Firstclass.description
-		s.bases[i] = Firstclass
-		i++
-	}
-
-	if chapter {
-		allBases += Chapter.base + " " + Chapter.description
-		s.bases[i] = Chapter
-		i++
-	}
-
-	bases.SetText(allBases)
+	Bases.SetText(allBases)
 }

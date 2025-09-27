@@ -25,7 +25,9 @@ var (
 // Filling out the System structure's Size, adding the text to
 // the label that's in the Box
 func (s *system) getSize() {
-	s.Size = int8(zero_to_ten())
+	if !s.Detailed {
+		s.Size = int8(zero_to_ten())
+	}
 
 	size.SetText(sz + " " + string(trv_int[s.Size]) + ", " +
 		sizeDetails[s.Size].size + ", gravity " +
