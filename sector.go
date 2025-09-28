@@ -27,6 +27,12 @@ var (
 )
 
 func (s sector) init(b *widget.Box) {
+	// set the 2D array of System for the Sector up
+	SystemGrid = make([][]system, 10)
+	for i := 0; i < 10; i++ {
+		SystemGrid[i] = make([]system, 8)
+	}
+
 	systems := 0
 	totalPop := int64(0)
 	maxPop := int8(-1)
@@ -38,7 +44,7 @@ func (s sector) init(b *widget.Box) {
 	for row := 0; row < 10; row++ {
 		for column := 0; column < 8; column++ {
 			if zero_to_one() == 1 {
-				systemGrid[column][row].init(&nxtUI)
+				SystemGrid[row][column].init(&nxtUI)
 				b.Children = make([]fyne.CanvasObject, 0)
 				systems++
 
@@ -49,10 +55,10 @@ func (s sector) init(b *widget.Box) {
 
 				s.system_list += strconv.Itoa(column) + strconv.Itoa(row) +
 					" " + uw_profile.Text +
-					strings.Repeat(" ", int(1.25*float32((32-len(systemGrid[column][row].Codes)))))
+					strings.Repeat(" ", int(1.25*float32((32-len(SystemGrid[row][column].Codes)))))
 
-				nxtPop := systemGrid[column][row].Population
-				totalPop += int64(systemGrid[column][row].PopulationCount)
+				nxtPop := SystemGrid[row][column].Population
+				totalPop += int64(SystemGrid[row][column].PopulationCount)
 				if nxtPop > maxPop {
 					numPopMax = 1
 					maxPop = nxtPop
@@ -71,7 +77,7 @@ func (s sector) init(b *widget.Box) {
 					}
 				}
 
-				nxtTech := systemGrid[column][row].Technology_Level
+				nxtTech := SystemGrid[row][column].Technology_Level
 				if nxtTech > maxTech {
 					numPopMax = 1
 					maxTech = nxtTech

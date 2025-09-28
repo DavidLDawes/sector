@@ -6,10 +6,9 @@ import (
 )
 
 var (
-	nextSys    system
 	mySector   sector
 	nxtUI      widget.Box
-	systemGrid [8][10]system
+	SystemGrid [][]system
 )
 
 func main() {

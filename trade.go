@@ -137,9 +137,7 @@ func (s *system) getCodes() {
 	}
 	trade_codes.SetText(codes)
 	uw_profile.SetText(uw_profile.Text + compressed)
-	s.Codes = compressed
-}
-
-func (s *system) GetCodesText() string {
-	return trade_codes.Text
+	if !s.Detailed {
+		s.Codes = compressed
+	}
 }

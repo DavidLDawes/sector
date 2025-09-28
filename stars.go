@@ -44,11 +44,12 @@ var (
 // Filling out the System structure's Size, adding the text to
 // the label that's in the Box
 func (s *system) getStars() {
-	s.Size = int8(zero_to_ten())
+	if !s.Detailed {
+		s.Size = int8(zero_to_ten())
+	}
 
 	stars.SetText(starCounts[s.numStars-1].description +
 		s.getStarsDetails())
-	s.Detailed = true
 }
 
 func (s *system) getStarsDetails() string {
