@@ -41,6 +41,7 @@ type system struct {
 	Technology_Level   int8
 	Starport           int8
 	bases              []starBase
+	textBox            widget.Box
 }
 
 var (
@@ -57,16 +58,20 @@ var (
 	bases            = widget.NewLabel("")
 	trade_codes      = widget.NewLabel("")
 
-	systemDetailsBox = widget.NewVBox(
+func (s *system) init() {
+	s.textBox = *widget.NewVBox()
+	s.createSystem()
+	s.textBox = *widget.NewVBox(
 		uw_profile, widget.NewLabel("System Details"),
 		stars, size, atmosphere, hydrology,
 		population, government,
 		law_level, technology_level,
 		starport, bases, trade_codes,
 	)
-)
+	s.initButton()
+}
 
-func (s *system) init(box *widget.Box) {
+func (s *system) createSystem() {
 	s.getStars()
 	s.getSize()
 	s.getAtmosphere()
