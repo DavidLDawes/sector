@@ -3,31 +3,35 @@ package main
 var (
 	Scout = starBase{
 		sct,
-		" Offers customized docking, pickup for X-Boats, refined fuel and supplies to\nscout ships and couriers.\n",
+		" Offers customized docking, pickup for X-Boats, refined\nfuel and supplies to scout ships and couriers.\n",
 	}
 	Research = starBase{
 		rsrch,
-		" Large organization dedicated to a particular field of research.\n",
+		" Large organization dedicated to a particular field\nof research.\n",
 	}
 	Consulate = starBase{
 		cons,
-		" Administration office for various departments such as commerce,\njustice and foreign affairs. Characters wishing to report significant crimes or\nobtain various permits will need to visit a consulate.\n",
+		" Administration office for various departments such as\ncommerce, justice and foreign affairs. Characters wishing to report significant\ncrimes or obtain various permits will need to visit a consulate.\n",
+	}
+	Hidden = starBase{
+		pir,
+		" The presence of a pirate base hidden in a system indicates\nthat a group of thieves is active in the area. Pirates will be operating out of\na remote base away from the starport itself; agents working for the pirates and\nsympathizers (their fences and suppliers too) at the starpot and they will be\non the lookout for likely prey.\n",
 	}
 	Pirate = starBase{
 		pir,
-		" The presence of a pirate base in a system indicates that a group of\nthieves is active in the area. Pirates are unlikely to be operating out of the\nstarport itself (except on a Law Level 0 world), but no doubt have agents at the\nport on the lookout for likely prey.\n",
+		" The presence of a pirate base in a system indicates that\na group of thieves who raid shipping is active in the area. On this Law Level 0\nworld Pirates may operate directly out of the starport itself, with agents at\nthe port selling loot and ransoming prisoners.\n",
 	}
 	Ancient = starBase{
 		anc,
-		" Archeological treasure troves from a long vanished race with\noccasionally very high tech items on a random planet or moon.\n",
+		" Archeological treasure troves from a long vanished \nrace/society with occasionally very high tech items on a random planet or moon.\n",
 	}
 	Merchant = starBase{
 		merch,
-		" Trading and import/export infrastructure with warehouses, markets,\ncargo docks, and regular starship visits.\n",
+		" Trading and import/export infrastructure with warehouses,\nmarkets, cargo docks, and regular starship visits.\n",
 	}
 	Yard = starBase{
 		yard,
-		" Ship manufacturing, refit, repair, and servicing facilities,\nusually in orbit\n",
+		" Ship manufacturing, refit, repair, and servicing facilities,\nusually in orbit.\n",
 	}
 
 	Megacorp = starBase{
@@ -37,7 +41,7 @@ var (
 
 	Naval = starBase{
 		nav,
-		" Naval warships and service vessels are stationed or based\nhere, along with the facilities, administrative and personnel resources these\nfleets require. Plenty of business and indusrty driven by the Navy.\n",
+		" Naval warships and service vessels are stationed or based here,\nalong with the facilities, administrative and personnel resources these fleets\nrequire. Plenty of business and indusrty driven by the Navy.\n",
 	}
 
 	University = starBase{
@@ -52,7 +56,7 @@ var (
 
 	Travellers = starBase{
 		trv,
-		" Low end facility, reasonable rooms well secured, not fancy.\n",
+		" Low end facility, reasonable rooms well secured,\nnot fancy.\n",
 	}
 
 	Chapter = starBase{
@@ -62,7 +66,7 @@ var (
 
 	Firstclass = starBase{
 		first,
-		" All the comforts, features asnd luxuries you could ask\nfor (if you can afford them). Free room and board for TAS members.\n",
+		" All the comforts, features and luxuries you could ask\nfor (if you can afford them). Free room and board for TAS members.\n",
 	}
 )
 
@@ -145,11 +149,17 @@ func (s system) getBases() {
 
 	// Pirate Base: Starport B: Throw 12+, Starport C: Throw 10+, Starport D or E: Throw 12+.
 	pirate := false
+	hidden := false
 	switch s.Starport {
 	case 4, 2, 1:
 		// B, D or E
 		if zero_to_ten() == 9 {
-			pirate = true
+
+			if s.Law_Level > 0 {
+				hidden = true
+			} else {
+				pirate = true
+			}
 			numBases++
 		}
 	case 3:
@@ -284,6 +294,12 @@ func (s system) getBases() {
 		s.bases[i] = Naval
 		i++
 
+	}
+
+	if hidden {
+		allBases += Hidden.base + " " + Hidden.description
+		s.bases[i] = Hidden
+		i++
 	}
 
 	if pirate {

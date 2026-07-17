@@ -56,8 +56,7 @@ var (
 	technology_level = widget.NewLabel("")
 	starport         = widget.NewLabel("")
 	bases            = widget.NewLabel("")
-	generateAgain    widget.Button
-)
+	trade_codes      = widget.NewLabel("")
 
 func (s *system) init() {
 	s.textBox = *widget.NewVBox()
@@ -67,7 +66,7 @@ func (s *system) init() {
 		stars, size, atmosphere, hydrology,
 		population, government,
 		law_level, technology_level,
-		starport, bases,
+		starport, bases, trade_codes,
 	)
 	s.initButton()
 }
@@ -83,6 +82,7 @@ func (s *system) createSystem() {
 	s.getStarport()
 	s.getTechLevel()
 	s.getBases()
-	s.initButton()
-	s.textBox.Children = append(s.textBox.Children, &generateAgain)
+	s.getCodes()
+
+	box.Children = append(box.Children, systemDetailsBox)
 }

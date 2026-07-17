@@ -8,8 +8,8 @@ var lawDetails = []string{
 	"No light assault weapons or submachine guns",
 	"No personal concealable weapons",
 	"No firearms except shotguns and stunners; carrying weapons discouraged",
-	"Only stunners; carrying weapons discouraged",
-	"All bladed weapons, no firearms at all",
+	"Only stunners allowed; carrying weapons discouraged",
+	"Bladed weapons allowed, no firearms at all",
 	"No weapons of any sort",
 }
 
